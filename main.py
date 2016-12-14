@@ -47,7 +47,7 @@ class Fighter(object):
     def angry(self, number):
         number1 = number * random.random()
         number2 = number * random.random()
-        print("%s 发怒了，把 %s 按在地上一顿爆打，%s 受到了 %d 点伤害，\n%s 受到了 %d 点伤害，%s 受到了 %d 点伤害，%s 挣脱了。"%(self.NAME, self.ENEMY, self.ENEMY, number, self.ENEMY, number1, self.ENEMY, number2, self.ENEMY))
+        print("%s 发怒了，把 %s 按在地上一顿暴打，%s 受到了 %d 点伤害，\n%s 受到了 %d 点伤害，%s 受到了 %d 点伤害，%s 挣脱了。"%(self.NAME, self.ENEMY, self.ENEMY, number, self.ENEMY, number1, self.ENEMY, number2, self.ENEMY))
         num = number + number1 + number2
         return num
 
