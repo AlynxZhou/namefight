@@ -99,7 +99,7 @@ class Fighter(object):
 
 
     def fall(self, number):
-        if random.random() >= 0.5:
+        if self.nums["CHE"] < self.spawn_num(min, max):
             print("%s 向 %s 发起攻击，但是被 %s 绊倒了，%s 受到了 %d 点伤害。"%(self.NAME, self.ENEMY, self.ENEMY, self.NAME, number))
             num = number
         else:
@@ -137,7 +137,7 @@ def hurt(obj, enemy, hp_limit):
     while num > max:
         num = num - max * random.random()
 
-    if obj.nums["ACC"] > obj.spawn_num(min, max):
+    if obj.nums["ACC"] > obj.spawn_num(min, 0.5 * x):
         fight_way = random.choice(["bite", "angry", "attrack", "sleep", "curse"])
         if fight_way != "sleep":
             enemy.hurt(obj.fight(fight_way, num))
