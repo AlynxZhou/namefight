@@ -158,6 +158,9 @@ def main():
     else:
         plr2_name = args.name2
 
+    if plr1_name == "日耳曼战神" or plr2_name == "日耳曼战神":
+        print("做梦吧你，日耳曼战神永远是最强的，想打赢战神？不可能！")
+        exit()
     plr1 = Fighter(plr1_name, plr2_name)
     plr2 = Fighter(plr2_name, plr1_name)
 
