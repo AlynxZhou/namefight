@@ -5,15 +5,18 @@
 ## Created by 请叫我喵 Alynx
 # sxshax@gmail.com, http://alynx.xyz/
 
+
 import time
 import random
 import hashlib
 import argparse
 
+
 aparser = argparse.ArgumentParser(description="输入两个名字，让它们来决斗吧！")
 aparser.add_argument("name1", nargs='?', help="第一个名字。", action="store")
 aparser.add_argument("name2", nargs='?', help="第二个名字。", action="store")
 args = aparser.parse_args()
+
 
 class Fighter(object):
     def __init__(self, name, enemy_name):
@@ -182,6 +185,7 @@ def main():
     if plr1_name == "日耳曼战神" or plr2_name == "日耳曼战神":
         print("做梦吧你，日耳曼战神永远是最强的，想打赢战神？不可能！")
         exit()
+
     plr1 = Fighter(plr1_name, plr2_name)
     plr2 = Fighter(plr2_name, plr1_name)
 
@@ -208,6 +212,7 @@ def main():
             print("------------------------------------------------")
             time.sleep(0.5)
             hurt(plr2, plr1, hp_limit)
+
         elif plr1.nums["SPD"] <= plr2.nums["SPD"]:
             print("================================================")
             time.sleep(0.5)
@@ -222,15 +227,20 @@ def main():
             print("------------------------------------------------")
             time.sleep(0.5)
             hurt(plr1, plr2, hp_limit)
+
         time.sleep(0.5)
         print("================================================")
         time.sleep(0.5)
 
     print("================================================")
+
     if plr1.nums["HP"] <= 0:
         print("\033[33;1m%s\033[0m 输了，获胜者是 \033[33;1m%s\033[0m。"%(plr1_name, plr2_name))
     elif plr2.nums["HP"] <= 0:
         print("\033[33;1m%s\033[0m 输了，获胜者是 \033[33;1m%s\033[0m。"%(plr2_name, plr1_name))
+
+    exit()
+
 
 if __name__ == "__main__":
     try:
