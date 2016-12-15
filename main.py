@@ -32,9 +32,9 @@ class Fighter(object):
 
     def md5_count(self, md5, start, lenth, step=1):
         summ = 0
-        for x in str(int(md5[start:start + lenth:step], base=16)):
-            summ += int(x)
-        return summ
+        for x in md5[start:start + lenth:step]:
+            summ += int(x, base=16)
+        return int(summ)
 
     def spawn_num(self, mmin, mmax):
         if mmin > mmax and mmax:
@@ -47,7 +47,7 @@ class Fighter(object):
 
     def print_item(self, enemy):
         self.enemy_nums = enemy.nums
-        print("%s 的数据："%(self.NAME))
+        print("\033[33;1m%s\033[0m 的数据："%(self.NAME))
         print("    +------------+------------+------------+")
         print("    | 体力：%4d |"%(self.nums["HP"]), end='')
         print(" 攻击：%4d |"%(self.nums["ATK"]), end='')
@@ -67,19 +67,19 @@ class Fighter(object):
 
     def bite(self, number):
         number += self.spawn_num(1, 0.7 * number)
-        print("%s 发狂了，上前咬了 %s 一口，造成了 %d 点伤害。"%(self.NAME, self.ENEMY, number))
+        print("\033[33;1m%s\033[0m 发狂了，上前咬了 \033[33;1m%s\033[0m 一口，\n造成了 %d 点伤害。"%(self.NAME, self.ENEMY, number))
         num = number
         case_num = {"HP": num}
         return case_num
 
     def sleep(self, number):
-        print("%s 给 %s 唱了安眠曲，%s 睡着了，%s 趁机恢复了 %d 点体力。"%(self.NAME, self.ENEMY, self.ENEMY, self.NAME, number))
+        print("\033[33;1m%s\033[0m 给 \033[33;1m%s\033[0m 唱了安眠曲，\033[33;1m%s\033[0m 睡着了，\n\033[33;1m%s\033[0m 趁机恢复了 %d 点体力。"%(self.NAME, self.ENEMY, self.ENEMY, self.NAME, number))
         num = - number
         case_num = {"HP": num}
         return case_num
 
     def curse(self, number):
-        print("%s 诅咒了 %s，%s 的各项数值下降了。"%(self.NAME, self.ENEMY, self.ENEMY))
+        print("\033[33;1m%s\033[0m 诅咒了 \033[33;1m%s\033[0m，\033[33;1m%s\033[0m 的各项数值下降了。"%(self.NAME, self.ENEMY, self.ENEMY))
         num = number
         case_num = {
             "ATK": self.spawn_num(num, self.enemy_nums["ATK"]),
@@ -91,7 +91,7 @@ class Fighter(object):
         return case_num
 
     def pray(self, number):
-        print("%s 向上天祈祷，%s 的各项数值上升了。"%(self.NAME, self.NAME))
+        print("\033[33;1m%s\033[0m 向上天祈祷，\033[33;1m%s\033[0m 的各项数值上升了。"%(self.NAME, self.NAME))
         num = number
         case_num = {
             "ATK": - self.spawn_num(num, self.nums["ATK"] * 3 / 2),
@@ -105,26 +105,25 @@ class Fighter(object):
     def angry(self, number):
         number1 = self.spawn_num(1, 0.6 * number)
         number2 = self.spawn_num(1, 0.3 * number)
-        print("%s 发怒了，把 %s 按在地上一顿暴打，%s 受到了 %d 点伤害，\n%s 受到了 %d 点伤害，%s 受到了 %d 点伤害，%s 挣脱了。"%(self.NAME, self.ENEMY, self.ENEMY, number, self.ENEMY, number1, self.ENEMY, number2, self.ENEMY))
+        print("\033[33;1m%s\033[0m 发怒了，把 \033[33;1m%s\033[0m 按在地上一顿暴打，\n\033[33;1m%s\033[0m 受到了 %d 点伤害，\033[33;1m%s\033[0m 受到了 %d 点伤害，\n\033[33;1m%s\033[0m 受到了 %d 点伤害，\033[33;1m%s\033[0m 挣脱了。"%(self.NAME, self.ENEMY, self.ENEMY, number, self.ENEMY, number1, self.ENEMY, number2, self.ENEMY))
         num = number + number1 + number2
         case_num = {"HP": num}
         return case_num
 
     def attrack(self, number):
-        print("%s 向 %s 发起了攻击，%s 受到了 %d 点伤害。"%(self.NAME, self.ENEMY, self.ENEMY, number))
+        print("\033[33;1m%s\033[0m 向 \033[33;1m%s\033[0m 发起了攻击，\033[33;1m%s\033[0m 受到了 %d 点伤害。"%(self.NAME, self.ENEMY, self.ENEMY, number))
         num = number
         case_num = {"HP": num}
         return case_num
 
-
     def fall(self, number):
-        print("%s 向 %s 发起攻击，但是被 %s 绊倒了，%s 受到了 %d 点伤害。"%(self.NAME, self.ENEMY, self.ENEMY, self.NAME, number))
+        print("\033[33;1m%s\033[0m 向 \033[33;1m%s\033[0m 发起攻击，但是被 \033[33;1m%s\033[0m 绊倒了，\n\033[33;1m%s\033[0m 受到了 %d 点伤害。"%(self.NAME, self.ENEMY, self.ENEMY, self.NAME, number))
         num = number
         case_num = {"HP": num}
         return case_num
 
     def miss(self, number):
-        print("%s 向 %s 发起攻击，但是被 %s 躲开了。"%(self.NAME, self.ENEMY, self.ENEMY))
+        print("\033[33;1m%s\033[0m 向 \033[33;1m%s\033[0m 发起攻击，但是被 \033[33;1m%s\033[0m 躲开了。"%(self.NAME, self.ENEMY, self.ENEMY))
         num = 0
         case_num = {"HP": num}
         return case_num
@@ -223,12 +222,15 @@ def main():
             print("------------------------------------------------")
             time.sleep(0.5)
             hurt(plr1, plr2, hp_limit)
+        time.sleep(0.5)
+        print("================================================")
+        time.sleep(0.5)
 
     print("================================================")
     if plr1.nums["HP"] <= 0:
-        print("%s 输了，获胜者是 %s。"%(plr1_name, plr2_name))
+        print("\033[33;1m%s\033[0m 输了，获胜者是 \033[33;1m%s\033[0m。"%(plr1_name, plr2_name))
     elif plr2.nums["HP"] <= 0:
-        print("%s 输了，获胜者是 %s。"%(plr2_name, plr1_name))
+        print("\033[33;1m%s\033[0m 输了，获胜者是 \033[33;1m%s\033[0m。"%(plr2_name, plr1_name))
 
 if __name__ == "__main__":
     try:
