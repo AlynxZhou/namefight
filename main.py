@@ -7,6 +7,7 @@
 
 import time
 import random
+import hashlib
 import argparse
 
 aparser = argparse.ArgumentParser(description="输入两个名字，让它们来决斗吧！")
@@ -14,29 +15,25 @@ aparser.add_argument("name1", nargs='?', help="第一个名字。", action="stor
 aparser.add_argument("name2", nargs='?', help="第二个名字。", action="store")
 args = aparser.parse_args()
 
-
-x = 1000
-max = int(0.7 * x)
-min = int(0.3 * x)
-
 class Fighter(object):
-    global x
+    #global x
     def __init__(self, name, enemy_name):
         self.NAME = name
         self.ENEMY = enemy_name
+        self.md5 = hashlib.md5(name.encode("UTF-8")).hexdigest()
         self.nums = {
-            "HP": self.spawn_num(min, max),
-            "ATK": self.spawn_num(min, max),
-            "DEF": self.spawn_num(min, max),
-            "SPD": self.spawn_num(min, max),
-            "CHE": self.spawn_num(min, max),
-            "ACC": self.spawn_num(min, max)
+            "HP": int(self.md5[0:7:3], base=16) / 3,
+            "ATK": int(self.md5[7:12:3], base=16),
+            "DEF": int(self.md5[12:17:3], base=16),
+            "SPD": int(self.md5[17:22:3], base=16),
+            "CHE": int(self.md5[22:27:3], base=16),
+            "ACC": int(self.md5[27:32:3], base=16)
         }
 
-    def spawn_num(self, min, max):
-        while min > max:
-            min -= max
-        return int(random.random() * (max - min) + min)
+    def spawn_num(self, mmin, mmax):
+        if mmin > mmax:
+            mmin %= mmax
+        return int(random.random() * (mmax - mmin) + mmin)
 
     def print_item(self):
         print("%s 的数据："%(self.NAME))
@@ -74,11 +71,11 @@ class Fighter(object):
         print("%s 诅咒了 %s，%s 的各项数值下降了。"%(self.NAME, self.ENEMY, self.ENEMY))
         num = number
         case_num = {
-            "ATK": self.spawn_num(num * random.random(), num),
-            "DEF": self.spawn_num(num * random.random(), num),
-            "SPD": self.spawn_num(num * random.random(), num),
-            "CHE": self.spawn_num(num * random.random(), num),
-            "ACC": self.spawn_num(num * random.random(), num)
+            "ATK": self.spawn_num(num * random.random(), self.nums["ATK"] * random.random()),
+            "DEF": self.spawn_num(num * random.random(), self.nums["DEF"] * random.random()),
+            "SPD": self.spawn_num(num * random.random(), self.nums["SPD"] * random.random()),
+            "CHE": self.spawn_num(num * random.random(), self.nums["CHE"] * random.random()),
+            "ACC": self.spawn_num(num * random.random(), self.nums["ACC"] * random.random())
         }
         return case_num
 
@@ -99,19 +96,22 @@ class Fighter(object):
 
 
     def fall(self, number):
-        if self.nums["CHE"] < self.spawn_num(min, max):
-            print("%s 向 %s 发起攻击，但是被 %s 绊倒了，%s 受到了 %d 点伤害。"%(self.NAME, self.ENEMY, self.ENEMY, self.NAME, number))
-            num = number
-        else:
-            print("%s 向 %s 发起攻击，但是被 %s 躲开了。"%(self.NAME, self.ENEMY, self.ENEMY))
-            num = 0
+        print("%s 向 %s 发起攻击，但是被 %s 绊倒了，%s 受到了 %d 点伤害。"%(self.NAME, self.ENEMY, self.ENEMY, self.NAME, number))
+        num = number
+        case_num = {"HP": num}
+        return case_num
+
+    def miss(self, number):
+        print("%s 向 %s 发起攻击，但是被 %s 躲开了。"%(self.NAME, self.ENEMY, self.ENEMY))
+        num = 0
         case_num = {"HP": num}
         return case_num
 
     def fight(self, kind, number):
         return {
             "bite": lambda x: self.bite(x),
-            #"fall": lambda x, y: self.fall(x, y),
+            "miss": lambda x: self.miss(x),
+            "fall": lambda x: self.fall(x),
             "angry": lambda x: self.angry(x),
             "curse": lambda x: self.curse(x),
             "attrack": lambda x: self.attrack(x),
@@ -127,17 +127,17 @@ def hurt(obj, enemy, hp_limit):
                     obj.nums["ATK"] - enemy.nums["DEF"]
                 ) * abs(
                     obj.nums["CHE"] - enemy.nums["CHE"]
-                ) / x - abs(
+                ) - abs(
                     obj.nums["ATK"]
-                )
+                ) * random.random()
             )
         ),
         hp_limit
     )
-    while num > max:
-        num = num - max * random.random()
+    #while num > max:
+        #num = num - max * random.random()
 
-    if obj.nums["ACC"] > obj.spawn_num(min, 0.5 * x):
+    if obj.nums["ACC"] > int((obj.nums["ACC"] + enemy.nums["ACC"]) * random.random()):
         fight_way = random.choice(["bite", "angry", "attrack", "sleep", "curse"])
         if fight_way != "sleep":
             enemy.hurt(obj.fight(fight_way, num))
@@ -145,7 +145,11 @@ def hurt(obj, enemy, hp_limit):
             obj.hurt(obj.fight(fight_way, num))
     else:
         num = int(num * random.random())
-        obj.hurt(obj.fall(num))
+        if obj.nums["CHE"] > int((obj.nums["CHE"] + enemy.nums["CHE"]) * random.random()):
+            fight_way = "miss"
+        else:
+            fight_way = "fall"
+        obj.hurt(obj.fight(fight_way, num))
 
 
 def main():
