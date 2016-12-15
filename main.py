@@ -200,13 +200,15 @@ def main():
     while ((plr1.nums["HP"] > 0) and (plr2.nums["HP"] > 0)):
         if plr1.nums["SPD"] > plr2.nums["SPD"]:
             print("================================================")
-            time.sleep(0.5)
             plr1.print_item(plr2)
             plr2.print_item(plr1)
             print("================================================")
             time.sleep(0.5)
             hurt(plr1, plr2, hp_limit)
             if not ((plr1.nums["HP"] > 0) and (plr2.nums["HP"] > 0)):
+                time.sleep(0.5)
+                print("================================================")
+                time.sleep(0.5)
                 break
             time.sleep(0.5)
             print("------------------------------------------------")
@@ -215,13 +217,15 @@ def main():
 
         elif plr1.nums["SPD"] <= plr2.nums["SPD"]:
             print("================================================")
-            time.sleep(0.5)
             plr2.print_item(plr1)
             plr1.print_item(plr2)
             print("================================================")
             time.sleep(0.5)
             hurt(plr2, plr1, hp_limit)
             if not ((plr1.nums["HP"] > 0) and (plr2.nums["HP"] > 0)):
+                time.sleep(0.5)
+                print("================================================")
+                time.sleep(0.5)
                 break
             time.sleep(0.5)
             print("------------------------------------------------")
@@ -235,9 +239,21 @@ def main():
     print("================================================")
 
     if plr1.nums["HP"] <= 0:
+        plr1.print_item(plr2)
+        plr2.print_item(plr1)
+        print("================================================")
+        time.sleep(0.5)
         print("\033[33;1m%s\033[0m 输了，获胜者是 \033[33;1m%s\033[0m。"%(plr1_name, plr2_name))
+        time.sleep(0.5)
+        print("================================================")
     elif plr2.nums["HP"] <= 0:
+        plr1.print_item(plr2)
+        plr2.print_item(plr1)
+        print("================================================")
+        time.sleep(0.5)
         print("\033[33;1m%s\033[0m 输了，获胜者是 \033[33;1m%s\033[0m。"%(plr2_name, plr1_name))
+        time.sleep(0.5)
+        print("================================================")
 
     exit()
 
