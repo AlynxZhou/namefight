@@ -170,18 +170,18 @@ def main():
     hp_limit = int(abs(plr1.nums["HP"] + plr2.nums["HP"]) / 2 * 0.5)
 
     while ((plr1.nums["HP"] > 0) and (plr2.nums["HP"] > 0)):
-        print("==================================================")
+        print("================================================")
         time.sleep(0.5)
         plr1.print_item()
         plr2.print_item()
-        print("==================================================")
+        print("================================================")
         time.sleep(0.5)
         if plr1.nums["SPD"] > plr2.nums["SPD"]:
             hurt(plr1, plr2, hp_limit)
             if not (plr1.nums["HP"] > 0) and (plr2.nums["HP"] > 0):
                 break
             time.sleep(0.5)
-            print("--------------------------------------------------")
+            print("------------------------------------------------")
             time.sleep(0.5)
             hurt(plr2, plr1, hp_limit)
         elif plr1.nums["SPD"] < plr2.nums["SPD"]:
@@ -189,11 +189,11 @@ def main():
             if not (plr1.nums["HP"] > 0) and (plr2.nums["HP"] > 0):
                 break
             time.sleep(0.5)
-            print("--------------------------------------------------")
+            print("------------------------------------------------")
             time.sleep(0.5)
             hurt(plr1, plr2, hp_limit)
 
-    print("==================================================")
+    print("================================================")
     if plr1.nums["HP"] <= 0:
         print("%s 输了，获胜者是 %s。"%(plr1_name, plr2_name))
     elif plr2.nums["HP"] <= 0:
