@@ -29,13 +29,19 @@ class Fighter(object):
             "CHE": int(self.md5[22:27:3], base=16),
             "ACC": int(self.md5[27:32:3], base=16)
         }
+        self.enemy_nums = {}
 
     def spawn_num(self, mmin, mmax):
-        if mmin > mmax:
+        if mmin > mmax and mmax:
             mmin %= mmax
-        return int(random.random() * (mmax - mmin) + mmin)
+            return random.randint(int(mmin), int(mmax))
+        elif mmin <= mmax and mmax:
+            return random.randint(int(mmin), int(mmax))
+        elif mmax == 0:
+            return 0
 
-    def print_item(self):
+    def print_item(self, enemy):
+        self.enemy_nums = enemy.nums
         print("%s 的数据："%(self.NAME))
         print("    +------------+------------+------------+")
         print("    | 体力：%4d |"%(self.nums["HP"]), end='')
@@ -55,7 +61,7 @@ class Fighter(object):
                 pass
 
     def bite(self, number):
-        number += number * random.random()
+        number += self.spawn_num(1, 0.7 * number)
         print("%s 发狂了，上前咬了 %s 一口，造成了 %d 点伤害。"%(self.NAME, self.ENEMY, number))
         num = number
         case_num = {"HP": num}
@@ -71,17 +77,17 @@ class Fighter(object):
         print("%s 诅咒了 %s，%s 的各项数值下降了。"%(self.NAME, self.ENEMY, self.ENEMY))
         num = number
         case_num = {
-            "ATK": self.spawn_num(num * random.random(), self.nums["ATK"] * random.random()),
-            "DEF": self.spawn_num(num * random.random(), self.nums["DEF"] * random.random()),
-            "SPD": self.spawn_num(num * random.random(), self.nums["SPD"] * random.random()),
-            "CHE": self.spawn_num(num * random.random(), self.nums["CHE"] * random.random()),
-            "ACC": self.spawn_num(num * random.random(), self.nums["ACC"] * random.random())
+            "ATK": self.spawn_num(num, self.enemy_nums["ATK"]),
+            "DEF": self.spawn_num(num, self.enemy_nums["DEF"]),
+            "SPD": self.spawn_num(num, self.enemy_nums["SPD"]),
+            "CHE": self.spawn_num(num, self.enemy_nums["CHE"]),
+            "ACC": self.spawn_num(num, self.enemy_nums["ACC"])
         }
         return case_num
 
     def angry(self, number):
-        number1 = number * random.random()
-        number2 = number * random.random()
+        number1 = self.spawn_num(1, 0.6 * number)
+        number2 = self.spawn_num(1, 0.3 * number)
         print("%s 发怒了，把 %s 按在地上一顿暴打，%s 受到了 %d 点伤害，\n%s 受到了 %d 点伤害，%s 受到了 %d 点伤害，%s 挣脱了。"%(self.NAME, self.ENEMY, self.ENEMY, number, self.ENEMY, number1, self.ENEMY, number2, self.ENEMY))
         num = number + number1 + number2
         case_num = {"HP": num}
@@ -119,23 +125,18 @@ class Fighter(object):
         }[kind](number)
 
 def hurt(obj, enemy, hp_limit):
-    #num = int(abs(obj.nums["ATK"] - enemy.nums["DEF"]) * abs(obj.nums["CHE"] - enemy.nums["CHE"]) / 300)
     num = obj.spawn_num(
-        int(
+        abs(
             abs(
-                abs(
-                    obj.nums["ATK"] - enemy.nums["DEF"]
-                ) * abs(
-                    obj.nums["CHE"] - enemy.nums["CHE"]
-                ) - abs(
-                    obj.nums["ATK"]
-                ) * random.random()
-            )
+                obj.nums["ATK"] - enemy.nums["DEF"]
+            ) * abs(
+                obj.nums["CHE"] - enemy.nums["CHE"]
+            ) - abs(
+                obj.nums["ATK"]
+            ) * random.random()
         ),
         hp_limit
     )
-    #while num > max:
-        #num = num - max * random.random()
 
     if obj.nums["ACC"] > int((obj.nums["ACC"] + enemy.nums["ACC"]) * random.random()):
         fight_way = random.choice(["bite", "angry", "attrack", "sleep", "curse"])
@@ -179,8 +180,8 @@ def main():
     while ((plr1.nums["HP"] > 0) and (plr2.nums["HP"] > 0)):
         print("================================================")
         time.sleep(0.5)
-        plr1.print_item()
-        plr2.print_item()
+        plr1.print_item(plr2)
+        plr2.print_item(plr1)
         print("================================================")
         time.sleep(0.5)
         if plr1.nums["SPD"] > plr2.nums["SPD"]:
