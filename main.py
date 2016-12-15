@@ -16,20 +16,25 @@ aparser.add_argument("name2", nargs='?', help="第二个名字。", action="stor
 args = aparser.parse_args()
 
 class Fighter(object):
-    #global x
     def __init__(self, name, enemy_name):
         self.NAME = name
         self.ENEMY = enemy_name
         self.md5 = hashlib.md5(name.encode("UTF-8")).hexdigest()
         self.nums = {
-            "HP": int(self.md5[0:7:3], base=16) / 3,
-            "ATK": int(self.md5[7:12:3], base=16),
-            "DEF": int(self.md5[12:17:3], base=16),
-            "SPD": int(self.md5[17:22:3], base=16),
-            "CHE": int(self.md5[22:27:3], base=16),
-            "ACC": int(self.md5[27:32:3], base=16)
+            "HP": self.md5_count(self.md5, 0, 7) * 20,
+            "ATK": self.md5_count(self.md5, 7, 5) * 10,
+            "DEF": self.md5_count(self.md5, 12, 5) * 10,
+            "SPD": self.md5_count(self.md5, 17, 5) * 10,
+            "CHE": self.md5_count(self.md5, 22, 5) * 10,
+            "ACC": self.md5_count(self.md5, 27, 5) * 10
         }
         self.enemy_nums = {}
+
+    def md5_count(self, md5, start, lenth, step=1):
+        summ = 0
+        for x in str(int(md5[start:start + lenth:step], base=16)):
+            summ += int(x)
+        return summ
 
     def spawn_num(self, mmin, mmax):
         if mmin > mmax and mmax:
