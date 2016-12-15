@@ -85,6 +85,18 @@ class Fighter(object):
         }
         return case_num
 
+    def pray(self, number):
+        print("%s 向上天祈祷，%s 的各项数值上升了。"%(self.NAME, self.NAME))
+        num = number
+        case_num = {
+            "ATK": - self.spawn_num(num, self.nums["ATK"] * 3 / 2),
+            "DEF": - self.spawn_num(num, self.nums["DEF"] * 3 / 2),
+            "SPD": - self.spawn_num(num, self.nums["SPD"] * 3 / 2),
+            "CHE": - self.spawn_num(num, self.nums["CHE"] * 3 / 2),
+            "ACC": - self.spawn_num(num, self.nums["ACC"] * 3 / 2)
+        }
+        return case_num
+
     def angry(self, number):
         number1 = self.spawn_num(1, 0.6 * number)
         number2 = self.spawn_num(1, 0.3 * number)
@@ -117,6 +129,7 @@ class Fighter(object):
             "bite": lambda x: self.bite(x),
             "miss": lambda x: self.miss(x),
             "fall": lambda x: self.fall(x),
+            "pray": lambda x: self.pray(x),
             "angry": lambda x: self.angry(x),
             "curse": lambda x: self.curse(x),
             "attrack": lambda x: self.attrack(x),
@@ -138,8 +151,8 @@ def hurt(obj, enemy, hp_limit):
     )
 
     if obj.nums["ACC"] > int((obj.nums["ACC"] + enemy.nums["ACC"]) * random.random()):
-        fight_way = random.choice(["bite", "angry", "attrack", "sleep", "curse"])
-        if fight_way != "sleep":
+        fight_way = random.choice(["bite", "angry", "attrack", "sleep", "curse", "pray"])
+        if not fight_way in ["sleep", "pray"]:
             enemy.hurt(obj.fight(fight_way, num))
         else:
             obj.hurt(obj.fight(fight_way, num))
@@ -177,13 +190,13 @@ def main():
     hp_limit = int(abs(plr1.nums["HP"] + plr2.nums["HP"]) / 2 * 0.5)
 
     while ((plr1.nums["HP"] > 0) and (plr2.nums["HP"] > 0)):
-        print("================================================")
-        time.sleep(0.5)
-        plr1.print_item(plr2)
-        plr2.print_item(plr1)
-        print("================================================")
-        time.sleep(0.5)
         if plr1.nums["SPD"] > plr2.nums["SPD"]:
+            print("================================================")
+            time.sleep(0.5)
+            plr1.print_item(plr2)
+            plr2.print_item(plr1)
+            print("================================================")
+            time.sleep(0.5)
             hurt(plr1, plr2, hp_limit)
             if not ((plr1.nums["HP"] > 0) and (plr2.nums["HP"] > 0)):
                 break
@@ -192,6 +205,12 @@ def main():
             time.sleep(0.5)
             hurt(plr2, plr1, hp_limit)
         elif plr1.nums["SPD"] <= plr2.nums["SPD"]:
+            print("================================================")
+            time.sleep(0.5)
+            plr2.print_item(plr1)
+            plr1.print_item(plr2)
+            print("================================================")
+            time.sleep(0.5)
             hurt(plr2, plr1, hp_limit)
             if not ((plr1.nums["HP"] > 0) and (plr2.nums["HP"] > 0)):
                 break
