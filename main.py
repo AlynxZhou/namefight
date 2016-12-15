@@ -93,7 +93,6 @@ class Fighter(object):
         case_num = {"HP": num}
         return case_num
 
-
     def attrack(self, number):
         print("%s 向 %s 发起了攻击，%s 受到了 %d 点伤害。"%(self.NAME, self.ENEMY, self.ENEMY, number))
         num = number
@@ -186,15 +185,15 @@ def main():
         time.sleep(0.5)
         if plr1.nums["SPD"] > plr2.nums["SPD"]:
             hurt(plr1, plr2, hp_limit)
-            if not (plr1.nums["HP"] > 0) and (plr2.nums["HP"] > 0):
+            if not ((plr1.nums["HP"] > 0) and (plr2.nums["HP"] > 0)):
                 break
             time.sleep(0.5)
             print("------------------------------------------------")
             time.sleep(0.5)
             hurt(plr2, plr1, hp_limit)
-        elif plr1.nums["SPD"] < plr2.nums["SPD"]:
+        elif plr1.nums["SPD"] <= plr2.nums["SPD"]:
             hurt(plr2, plr1, hp_limit)
-            if not (plr1.nums["HP"] > 0) and (plr2.nums["HP"] > 0):
+            if not ((plr1.nums["HP"] > 0) and (plr2.nums["HP"] > 0)):
                 break
             time.sleep(0.5)
             print("------------------------------------------------")
