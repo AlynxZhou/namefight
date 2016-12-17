@@ -23,7 +23,7 @@ class Fighter(object):
         self.NAME = name
         self.ENEMY = enemy_name
         self.md5 = hashlib.md5(name.encode("UTF-8")).hexdigest()
-        self.nums = {
+        self.numbers = {
             "HP": self.md5_count(self.md5, 0, 7) * 20,
             "ATK": self.md5_count(self.md5, 7, 5) * 10,
             "DEF": self.md5_count(self.md5, 12, 5) * 10,
@@ -31,7 +31,7 @@ class Fighter(object):
             "CHE": self.md5_count(self.md5, 22, 5) * 10,
             "ACC": self.md5_count(self.md5, 27, 5) * 10
         }
-        self.enemy_nums = {}
+        self.enemy = None
 
     def md5_count(self, md5, start, lenth, step=1):
         summ = 0
@@ -39,7 +39,7 @@ class Fighter(object):
             summ += int(x, base=16)
         return int(summ)
 
-    def spawn_num(self, mmin, mmax):
+    def spawn_number(self, mmin, mmax):
         if mmin > mmax and mmax:
             mmin %= mmax
             return random.randint(int(mmin), int(mmax))
@@ -48,91 +48,107 @@ class Fighter(object):
         elif mmax == 0:
             return 0
 
-    def print_item(self, enemy):
-        self.enemy_nums = enemy.nums
-        print("%s 的数据："%(self.NAME))
-        print("    +------------+------------+------------+")
-        print("    | 体力：%4d |"%(self.nums["HP"]), end='')
-        print(" 攻击：%4d |"%(self.nums["ATK"]), end='')
-        print(" 防御：%4d |"%(self.nums["DEF"]), end='\n')
-        print("    +------------+------------+------------+")
-        print("    | 速度：%4d |"%(self.nums["SPD"]), end='')
-        print(" 运气：%4d |"%(self.nums["CHE"]), end='')
-        print(" 命中：%4d |"%(self.nums["ACC"]), end='\n')
-        print("    +------------+------------+------------+")
+    def get_enemy(self, enemy):
+        self.enemy = enemy
 
-    def hurt(self, case_num):
-        for x, y in case_num.items():
+    def print_item(self):
+        print("%s 的数据："%(self.NAME))
+        print("    ++============+============+============++")
+        print("    || 体力：%4d | 攻击：%4d | 防御：%4d ||"%(self.numbers["HP"], self.numbers["ATK"], self.numbers["DEF"]))
+        print("    ++------------+------------+------------++")
+        print("    || 速度：%4d | 运气：%4d | 命中：%4d ||"%(self.numbers["SPD"], self.numbers["CHE"], self.numbers["ACC"]))
+        print("    ++============+============+============++")
+
+    def hurt(self, case_number):
+        for x, y in case_number.items():
             try:
-                self.nums[x] -= y
+                self.numbers[x] -= y
             except:
                 pass
 
     def bite(self, number):
-        number += self.spawn_num(1, 0.7 * number)
-        print("%s 发狂了，上前咬了 %s 一口，\n造成了 \033[31;1m%d\033[0m 点伤害。"%(self.NAME, self.ENEMY, number))
-        num = number
-        case_num = {"HP": num}
-        return case_num
+        number1 = self.spawn_number(1, 0.7 * number)
+        number += number1
+        print("%s 发狂了，上前咬了 %s 一口，\n造成了 \033[31;1m%d\033[0m 点伤害，自己受到反噬的 %d 点伤害。"%(self.NAME, self.ENEMY, number, number1))
+        case_number = {"HP": number}
+        self.enemy.hurt(case_number)
+        case_number = {"HP": number1}
+        self.hurt(case_number)
 
     def sleep(self, number):
         print("%s 给 %s 唱了安眠曲，%s 睡着了，\n%s 趁机恢复了 \033[31;1m%d\033[0m 点体力。"%(self.NAME, self.ENEMY, self.ENEMY, self.NAME, number))
-        num = - number
-        case_num = {"HP": num}
-        return case_num
+        number = - number
+        case_number = {"HP": number}
+        self.hurt(case_number)
 
     def curse(self, number):
         print("%s 诅咒了 %s，%s 的各项数值下降了。"%(self.NAME, self.ENEMY, self.ENEMY))
-        num = number
-        case_num = {
-            "ATK": self.spawn_num(num, self.enemy_nums["ATK"]),
-            "DEF": self.spawn_num(num, self.enemy_nums["DEF"]),
-            "SPD": self.spawn_num(num, self.enemy_nums["SPD"]),
-            "CHE": self.spawn_num(num, self.enemy_nums["CHE"]),
-            "ACC": self.spawn_num(num, self.enemy_nums["ACC"])
+        case_number = {
+            "ATK": self.spawn_number(number, self.enemy.numbers["ATK"]),
+            "DEF": self.spawn_number(number, self.enemy.numbers["DEF"]),
+            "SPD": self.spawn_number(number, self.enemy.numbers["SPD"]),
+            "CHE": self.spawn_number(number, self.enemy.numbers["CHE"]),
+            "ACC": self.spawn_number(number, self.enemy.numbers["ACC"])
         }
-        return case_num
+        self.enemy.hurt(case_number)
 
     def pray(self, number):
         print("%s 向上天祈祷，%s 的各项数值上升了。"%(self.NAME, self.NAME))
-        num = number
-        case_num = {
-            "ATK": - self.spawn_num(num, self.nums["ATK"] * 3 / 2),
-            "DEF": - self.spawn_num(num, self.nums["DEF"] * 3 / 2),
-            "SPD": - self.spawn_num(num, self.nums["SPD"] * 3 / 2),
-            "CHE": - self.spawn_num(num, self.nums["CHE"] * 3 / 2),
-            "ACC": - self.spawn_num(num, self.nums["ACC"] * 3 / 2)
+        case_number = {
+            "ATK": - self.spawn_number(number, self.numbers["ATK"] * 3 / 2),
+            "DEF": - self.spawn_number(number, self.numbers["DEF"] * 3 / 2),
+            "SPD": - self.spawn_number(number, self.numbers["SPD"] * 3 / 2),
+            "CHE": - self.spawn_number(number, self.numbers["CHE"] * 3 / 2),
+            "ACC": - self.spawn_number(number, self.numbers["ACC"] * 3 / 2)
         }
-        return case_num
+        self.hurt(case_number)
 
     def angry(self, number):
-        number1 = self.spawn_num(1, 0.6 * number)
-        number2 = self.spawn_num(1, 0.3 * number)
+        number1 = self.spawn_number(1, 0.6 * number)
+        number2 = self.spawn_number(1, 0.3 * number)
         print("%s 发怒了，把 %s 按在地上一顿暴打，\n%s 受到了 \033[31;1m%d\033[0m 点伤害，%s 受到了 \033[31;1m%d\033[0m 点伤害，\n%s 受到了 \033[31;1m%d\033[0m 点伤害，%s 挣脱了。"%(self.NAME, self.ENEMY, self.ENEMY, number, self.ENEMY, number1, self.ENEMY, number2, self.ENEMY))
-        num = number + number1 + number2
-        case_num = {"HP": num}
-        return case_num
+        number = number + number1 + number2
+        case_number = {"HP": number}
+        self.enemy.hurt(case_number)
 
     def attrack(self, number):
         print("%s 向 %s 发起了攻击，%s 受到了 \033[31;1m%d\033[0m 点伤害。"%(self.NAME, self.ENEMY, self.ENEMY, number))
-        num = number
-        case_num = {"HP": num}
-        return case_num
+        case_number = {"HP": number}
+        self.enemy.hurt(case_number)
 
     def fall(self, number):
+        number = self.spawn_number(1, 0.7 * number)
         print("%s 向 %s 发起攻击，但是被 %s 绊倒了，\n%s 受到了 \033[31;1m%d\033[0m 点伤害。"%(self.NAME, self.ENEMY, self.ENEMY, self.NAME, number))
-        num = number
-        case_num = {"HP": num}
-        return case_num
+        case_number = {"HP": number}
+        self.hurt(case_number)
 
     def miss(self, number):
         print("%s 向 %s 发起攻击，但是被 %s 躲开了。"%(self.NAME, self.ENEMY, self.ENEMY))
-        num = 0
-        case_num = {"HP": num}
-        return case_num
 
-    def fight(self, kind, number):
-        return {
+    def fight(self, hp_limit):
+        number = self.spawn_number(
+            abs(
+                abs(
+                    self.numbers["ATK"] - self.enemy.numbers["DEF"]
+                ) * abs(
+                    self.numbers["CHE"] - self.enemy.numbers["CHE"]
+                ) - abs(
+                    self.numbers["ATK"]
+                ) * random.random()
+            ),
+            hp_limit
+        )
+
+        if self.numbers["ACC"] > int((self.numbers["ACC"] + self.enemy.numbers["ACC"]) * random.random()):
+            case = random.choice(["bite", "angry", "attrack", "sleep", "curse", "pray"])
+        else:
+            number = int(number * random.random())
+            if self.numbers["CHE"] > int((self.numbers["CHE"] + self.enemy.numbers["CHE"]) * random.random()):
+                case = "miss"
+            else:
+                case = "fall"
+
+        {
             "bite": lambda x: self.bite(x),
             "miss": lambda x: self.miss(x),
             "fall": lambda x: self.fall(x),
@@ -141,35 +157,7 @@ class Fighter(object):
             "curse": lambda x: self.curse(x),
             "attrack": lambda x: self.attrack(x),
             "sleep": lambda x: self.sleep(x)
-        }[kind](number)
-
-def hurt(obj, enemy, hp_limit):
-    num = obj.spawn_num(
-        abs(
-            abs(
-                obj.nums["ATK"] - enemy.nums["DEF"]
-            ) * abs(
-                obj.nums["CHE"] - enemy.nums["CHE"]
-            ) - abs(
-                obj.nums["ATK"]
-            ) * random.random()
-        ),
-        hp_limit
-    )
-
-    if obj.nums["ACC"] > int((obj.nums["ACC"] + enemy.nums["ACC"]) * random.random()):
-        fight_way = random.choice(["bite", "angry", "attrack", "sleep", "curse", "pray"])
-        if not fight_way in ["sleep", "pray"]:
-            enemy.hurt(obj.fight(fight_way, num))
-        else:
-            obj.hurt(obj.fight(fight_way, num))
-    else:
-        num = int(num * random.random())
-        if obj.nums["CHE"] > int((obj.nums["CHE"] + enemy.nums["CHE"]) * random.random()):
-            fight_way = "miss"
-        else:
-            fight_way = "fall"
-        obj.hurt(obj.fight(fight_way, num))
+        }[case](number)
 
 
 def main():
@@ -192,23 +180,26 @@ def main():
     plr1 = Fighter(plr1_name, plr2_name)
     plr2 = Fighter(plr2_name, plr1_name)
 
-    while abs(plr1.nums["HP"] - plr2.nums["HP"]) > 233:
-        if plr1.nums["HP"] < plr2.nums["HP"]:
-            plr1.nums["HP"] += abs(plr1.nums["HP"] - plr2.nums["HP"]) * random.random()
-        elif plr2.nums["HP"] < plr1.nums["HP"]:
-            plr2.nums["HP"] += abs(plr1.nums["HP"] - plr2.nums["HP"]) * random.random()
+    plr1.get_enemy(plr2)
+    plr2.get_enemy(plr1)
 
-    hp_limit = int(abs(plr1.nums["HP"] + plr2.nums["HP"]) / 2 * 0.5)
+    while abs(plr1.numbers["HP"] - plr2.numbers["HP"]) > 233:
+        if plr1.numbers["HP"] < plr2.numbers["HP"]:
+            plr1.numbers["HP"] += abs(plr1.numbers["HP"] - plr2.numbers["HP"]) * random.random()
+        elif plr2.numbers["HP"] < plr1.numbers["HP"]:
+            plr2.numbers["HP"] += abs(plr1.numbers["HP"] - plr2.numbers["HP"]) * random.random()
 
-    while ((plr1.nums["HP"] > 0) and (plr2.nums["HP"] > 0)):
-        if plr1.nums["SPD"] > plr2.nums["SPD"]:
+    hp_limit = int(abs(plr1.numbers["HP"] + plr2.numbers["HP"]) / 2 * 0.5)
+
+    while ((plr1.numbers["HP"] > 0) and (plr2.numbers["HP"] > 0)):
+        if plr1.numbers["SPD"] >= plr2.numbers["SPD"]:
             print("================================================")
-            plr1.print_item(plr2)
-            plr2.print_item(plr1)
+            plr1.print_item()
+            plr2.print_item()
             print("================================================")
             time.sleep(0.5)
-            hurt(plr1, plr2, hp_limit)
-            if not ((plr1.nums["HP"] > 0) and (plr2.nums["HP"] > 0)):
+            plr1.fight(hp_limit)
+            if not ((plr1.numbers["HP"] > 0) and (plr2.numbers["HP"] > 0)):
                 time.sleep(0.5)
                 print("================================================")
                 time.sleep(0.5)
@@ -216,16 +207,16 @@ def main():
             time.sleep(0.5)
             print("------------------------------------------------")
             time.sleep(0.5)
-            hurt(plr2, plr1, hp_limit)
+            plr2.fight(hp_limit)
 
-        elif plr1.nums["SPD"] <= plr2.nums["SPD"]:
+        elif plr1.numbers["SPD"] < plr2.numbers["SPD"]:
             print("================================================")
-            plr2.print_item(plr1)
-            plr1.print_item(plr2)
+            plr2.print_item()
+            plr1.print_item()
             print("================================================")
             time.sleep(0.5)
-            hurt(plr2, plr1, hp_limit)
-            if not ((plr1.nums["HP"] > 0) and (plr2.nums["HP"] > 0)):
+            plr2.fight(hp_limit)
+            if not ((plr1.numbers["HP"] > 0) and (plr2.numbers["HP"] > 0)):
                 time.sleep(0.5)
                 print("================================================")
                 time.sleep(0.5)
@@ -233,7 +224,7 @@ def main():
             time.sleep(0.5)
             print("------------------------------------------------")
             time.sleep(0.5)
-            hurt(plr1, plr2, hp_limit)
+            plr1.fight(hp_limit)
 
         time.sleep(0.5)
         print("================================================")
@@ -241,17 +232,37 @@ def main():
 
     print("================================================")
 
-    if plr1.nums["HP"] <= 0:
-        plr1.print_item(plr2)
-        plr2.print_item(plr1)
+    if plr1.numbers["HP"] <= 0 and plr2.numbers["HP"] <= 0:
+        if plr1.numbers["SPD"] >= plr2.numbers["SPD"]:
+            plr1.print_item()
+            plr2.print_item()
+        elif plr1.numbers["SPD"] < plr2.numbers["SPD"]:
+            plr2.print_item()
+            plr1.print_item()
+        print("================================================")
+        time.sleep(0.5)
+        print("%s 和 %s 棋逢对手，两败俱伤。"%(plr1_name, plr2_name))
+        time.sleep(0.5)
+        print("================================================")
+    elif plr1.numbers["HP"] <= 0 and plr2.numbers["HP"] > 0:
+        if plr1.numbers["SPD"] >= plr2.numbers["SPD"]:
+            plr1.print_item()
+            plr2.print_item()
+        elif plr1.numbers["SPD"] < plr2.numbers["SPD"]:
+            plr2.print_item()
+            plr1.print_item()
         print("================================================")
         time.sleep(0.5)
         print("%s 输了，获胜者是 %s。"%(plr1_name, plr2_name))
         time.sleep(0.5)
         print("================================================")
-    elif plr2.nums["HP"] <= 0:
-        plr1.print_item(plr2)
-        plr2.print_item(plr1)
+    elif plr1.numbers["HP"] > 0 and plr2.numbers["HP"] <= 0:
+        if plr1.numbers["SPD"] >= plr2.numbers["SPD"]:
+            plr1.print_item()
+            plr2.print_item()
+        elif plr1.numbers["SPD"] < plr2.numbers["SPD"]:
+            plr2.print_item()
+            plr1.print_item()
         print("================================================")
         time.sleep(0.5)
         print("%s 输了，获胜者是 %s。"%(plr2_name, plr1_name))
