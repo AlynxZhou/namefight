@@ -6,10 +6,14 @@
 # sxshax@gmail.com, http://alynx.xyz/
 
 
+import sys
 import time
 import random
 import hashlib
 import argparse
+
+if sys.version_info.major < 3:
+    import __future__
 
 
 aparser = argparse.ArgumentParser(description="输入两个名字，让它们来决斗吧！")
@@ -75,8 +79,16 @@ class Fighter(object):
         print("    ++============+============+============++")
         print("    || 体力：%4d | 攻击：%4d | 防御：%4d ||"%(self.numbers["HP"], self.numbers["ATK"], self.numbers["DEF"]))
         print("    ++------------+------------+------------++")
-        print("    || 速度：%4d | 运气：%4d | 命中：%4d ||"%(self.numbers["SPD"], self.numbers["CHE"], self.numbers["ACC"]))
+        print("    || 速度：%4d | 运气：%4d | 命中：%4d ||"%(self.numbers["SPD"], self.numbers["LUK"], self.numbers["ACC"]))
         print("    ++============+============+============++")
+
+    def check(self):
+        """
+        检查内部数据是否超限。
+        """
+        for x, y in self.numbers.items():
+            if y > 9999:
+                self.numbers[x] = 9999
 
     def hurt(self, case_number):
         """
@@ -97,7 +109,7 @@ class Fighter(object):
         """
         number1 = self.spawn_number(1, 0.7 * number)
         number += number1
-        print("%s 发狂了，上前咬了 %s 一口，\n造成了 \033[31;1m%d\033[0m 点伤害，自己受到反噬的 %d 点伤害。"%(self.NAME, self.ENEMY, number, number1))
+        print("%s 发狂了，\n上前咬了 %s 一口，\n造成了 \033[31;1m%d\033[0m 点伤害，\n自己受到反噬的 %d 点伤害。"%(self.NAME, self.ENEMY, number, number1))
         case_number = {"HP": number}    # 构建 dict
         self.enemy.hurt(case_number)    # 调用敌人的 hurt() 方法以处理敌方数据
         case_number = {"HP": number1}
@@ -107,7 +119,7 @@ class Fighter(object):
         """
         催眠回血，恢复传入值大小的体力。
         """
-        print("%s 给 %s 唱了安眠曲，%s 睡着了，\n%s 趁机恢复了 \033[31;1m%d\033[0m 点体力。"%(self.NAME, self.ENEMY, self.ENEMY, self.NAME, number))
+        print("%s 给 %s 唱了安眠曲，\n%s 睡着了，\n%s 趁机恢复了 \033[31;1m%d\033[0m 点体力。"%(self.NAME, self.ENEMY, self.ENEMY, self.NAME, number))
         number = - number
         case_number = {"HP": number}
         self.hurt(case_number)
@@ -116,27 +128,27 @@ class Fighter(object):
         """
         诅咒，降低对方除体力外的的所有战斗力，降低的随机值不大于对方已有的值。
         """
-        print("%s 诅咒了 %s，%s 的各项数值下降了。"%(self.NAME, self.ENEMY, self.ENEMY))
+        print("%s 诅咒了 %s，\n%s 的各项数值下降了。"%(self.NAME, self.ENEMY, self.ENEMY))
         case_number = {
-            "ATK": self.spawn_number(number, self.enemy.numbers["ATK"]),
-            "DEF": self.spawn_number(number, self.enemy.numbers["DEF"]),
-            "SPD": self.spawn_number(number, self.enemy.numbers["SPD"]),
-            "CHE": self.spawn_number(number, self.enemy.numbers["CHE"]),
-            "ACC": self.spawn_number(number, self.enemy.numbers["ACC"])
+            "ATK": self.spawn_number(number / 4, self.enemy.numbers["ATK"] * 0.7),
+            "DEF": self.spawn_number(number / 4, self.enemy.numbers["DEF"] * 0.7),
+            "SPD": self.spawn_number(number / 4, self.enemy.numbers["SPD"] * 0.7),
+            "LUK": self.spawn_number(number / 4, self.enemy.numbers["LUK"] * 0.7),
+            "ACC": self.spawn_number(number / 4, self.enemy.numbers["ACC"] * 0.7)
         }    # 构建含有多项数值的 dict
         self.enemy.hurt(case_number)
 
     def pray(self, number):
         """
-        祈祷，增加自己除体力外的所有战斗力，增加的随机值不大于自己以有的值。
+        祈祷，增加自己除体力外的所有战斗力，增加的随机值不大于自己以有的值的 1.5 倍。
         """
-        print("%s 向上天祈祷，%s 的各项数值上升了。"%(self.NAME, self.NAME))
+        print("%s 向上天祈祷，\n%s 的各项数值上升了。"%(self.NAME, self.NAME))
         case_number = {
-            "ATK": - self.spawn_number(number, self.numbers["ATK"] * 3 / 2),
-            "DEF": - self.spawn_number(number, self.numbers["DEF"] * 3 / 2),
-            "SPD": - self.spawn_number(number, self.numbers["SPD"] * 3 / 2),
-            "CHE": - self.spawn_number(number, self.numbers["CHE"] * 3 / 2),
-            "ACC": - self.spawn_number(number, self.numbers["ACC"] * 3 / 2)
+            "ATK": - self.spawn_number(number / 3, self.numbers["ATK"] * 3 / 2),
+            "DEF": - self.spawn_number(number / 3, self.numbers["DEF"] * 3 / 2),
+            "SPD": - self.spawn_number(number / 3, self.numbers["SPD"] * 3 / 2),
+            "LUK": - self.spawn_number(number / 3, self.numbers["LUK"] * 3 / 2),
+            "ACC": - self.spawn_number(number / 3, self.numbers["ACC"] * 3 / 2)
         }
         self.hurt(case_number)
 
@@ -146,7 +158,7 @@ class Fighter(object):
         """
         number1 = self.spawn_number(1, 0.6 * number)
         number2 = self.spawn_number(1, 0.3 * number)
-        print("%s 发怒了，把 %s 按在地上一顿暴打，\n%s 受到了 \033[31;1m%d\033[0m 点伤害，%s 受到了 \033[31;1m%d\033[0m 点伤害，\n%s 受到了 \033[31;1m%d\033[0m 点伤害，%s 挣脱了。"%(self.NAME, self.ENEMY, self.ENEMY, number, self.ENEMY, number1, self.ENEMY, number2, self.ENEMY))
+        print("%s 发怒了，\n把 %s 按在地上一顿暴打，\n%s 受到了 \033[31;1m%d\033[0m 点伤害，\n%s 受到了 \033[31;1m%d\033[0m 点伤害，\n%s 受到了 \033[31;1m%d\033[0m 点伤害，\n%s 挣脱了。"%(self.NAME, self.ENEMY, self.ENEMY, number, self.ENEMY, number1, self.ENEMY, number2, self.ENEMY))
         number = number + number1 + number2
         case_number = {"HP": number}
         self.enemy.hurt(case_number)
@@ -155,7 +167,7 @@ class Fighter(object):
         """
         普通攻击，给予对方传入值大小的伤害。
         """
-        print("%s 向 %s 发起了攻击，%s 受到了 \033[31;1m%d\033[0m 点伤害。"%(self.NAME, self.ENEMY, self.ENEMY, number))
+        print("%s 向 %s 发起了攻击，\n%s 受到了 \033[31;1m%d\033[0m 点伤害。"%(self.NAME, self.ENEMY, self.ENEMY, number))
         case_number = {"HP": number}
         self.enemy.hurt(case_number)
 
@@ -164,7 +176,7 @@ class Fighter(object):
         摔倒，随机发生在自己发起攻击，但命中率与运气值都较低的情况下，自己受到不大于传入值 50% 的伤害。
         """
         number = self.spawn_number(1, 0.5 * number)
-        print("%s 向 %s 发起攻击，但是被 %s 绊倒了，\n%s 受到了 \033[31;1m%d\033[0m 点伤害。"%(self.NAME, self.ENEMY, self.ENEMY, self.NAME, number))
+        print("%s 向 %s 发起攻击，\n但是被 %s 绊倒了，\n%s 受到了 \033[31;1m%d\033[0m 点伤害。"%(self.NAME, self.ENEMY, self.ENEMY, self.NAME, number))
         case_number = {"HP": number}
         self.hurt(case_number)
 
@@ -172,7 +184,7 @@ class Fighter(object):
         """
         未击中，随机发生在自己发起攻击，但命中率较低而运气值又较高的情况下，双方均不承受伤害。
         """
-        print("%s 向 %s 发起攻击，但是被 %s 躲开了。"%(self.NAME, self.ENEMY, self.ENEMY))
+        print("%s 向 %s 发起了攻击，\n但是被 %s 躲开了。"%(self.NAME, self.ENEMY, self.ENEMY))
 
     def fight(self, hp_limit):
         """
@@ -248,6 +260,9 @@ def main():
         elif plr2.numbers["HP"] < plr1.numbers["HP"]:
             plr2.numbers["HP"] += abs(plr1.numbers["HP"] - plr2.numbers["HP"]) * random.random()
 
+        plr1.check()
+        plr2.check()
+
     # 计算双方 HP 总和的 1 / 2 作为计算上限保证不会一击致命。
     hp_limit = int(abs(plr1.numbers["HP"] + plr2.numbers["HP"]) / 2 * 0.5)
 
@@ -255,87 +270,103 @@ def main():
     while ((plr1.numbers["HP"] > 0) and (plr2.numbers["HP"] > 0)):
         # 根据速度决定谁先攻击。
         if plr1.numbers["SPD"] >= plr2.numbers["SPD"]:
-            print("================================================")
+            plr1.check()
+            plr2.check()
+            print("==================================================")
             # 输出双方实时数据。
             plr1.print_item()
             plr2.print_item()
-            print("================================================")
+            print("==================================================")
             time.sleep(0.5)
             # 先手发起攻击。
             plr1.fight(hp_limit)
             # 判断是否致命。
             if not ((plr1.numbers["HP"] > 0) and (plr2.numbers["HP"] > 0)):
                 time.sleep(0.5)
-                print("================================================")
+                print("==================================================")
                 time.sleep(0.5)
                 break
             time.sleep(0.5)
-            print("------------------------------------------------")
+            print("--------------------------------------------------")
             time.sleep(0.5)
             # 后手发起攻击。
             plr2.fight(hp_limit)
 
         elif plr1.numbers["SPD"] < plr2.numbers["SPD"]:
-            print("================================================")
+            plr2.check()
+            plr1.check()
+            print("==================================================")
             plr2.print_item()
             plr1.print_item()
-            print("================================================")
+            print("==================================================")
             time.sleep(0.5)
             plr2.fight(hp_limit)
             if not ((plr1.numbers["HP"] > 0) and (plr2.numbers["HP"] > 0)):
                 time.sleep(0.5)
-                print("================================================")
+                print("==================================================")
                 time.sleep(0.5)
                 break
             time.sleep(0.5)
-            print("------------------------------------------------")
+            print("--------------------------------------------------")
             time.sleep(0.5)
             plr1.fight(hp_limit)
 
         time.sleep(0.5)
-        print("================================================")
+        print("==================================================")
         time.sleep(0.5)
 
-    print("================================================")
+    print("==================================================")
 
     # 判断结果。
     if plr1.numbers["HP"] <= 0 and plr2.numbers["HP"] <= 0:
         # 输出双方最终数据
         if plr1.numbers["SPD"] >= plr2.numbers["SPD"]:
+            plr1.check()
+            plr2.check()
             plr1.print_item()
             plr2.print_item()
         elif plr1.numbers["SPD"] < plr2.numbers["SPD"]:
+            plr2.check()
+            plr1.check()
             plr2.print_item()
             plr1.print_item()
-        print("================================================")
+        print("==================================================")
         time.sleep(0.5)
         print("%s 和 %s 棋逢对手，两败俱伤。"%(plr1_name, plr2_name))    # 平局。
         time.sleep(0.5)
-        print("================================================")
+        print("==================================================")
     elif plr1.numbers["HP"] <= 0 and plr2.numbers["HP"] > 0:
         if plr1.numbers["SPD"] >= plr2.numbers["SPD"]:
+            plr1.check()
+            plr2.check()
             plr1.print_item()
             plr2.print_item()
         elif plr1.numbers["SPD"] < plr2.numbers["SPD"]:
+            plr2.check()
+            plr1.check()
             plr2.print_item()
             plr1.print_item()
-        print("================================================")
+        print("==================================================")
         time.sleep(0.5)
         print("%s 输了，获胜者是 %s。"%(plr1_name, plr2_name))    # 一号玩家失败。
         time.sleep(0.5)
-        print("================================================")
+        print("==================================================")
     elif plr1.numbers["HP"] > 0 and plr2.numbers["HP"] <= 0:
         if plr1.numbers["SPD"] >= plr2.numbers["SPD"]:
+            plr1.check()
+            plr2.check()
             plr1.print_item()
             plr2.print_item()
         elif plr1.numbers["SPD"] < plr2.numbers["SPD"]:
+            plr2.check()
+            plr1.check()
             plr2.print_item()
             plr1.print_item()
-        print("================================================")
+        print("==================================================")
         time.sleep(0.5)
         print("%s 输了，获胜者是 %s。"%(plr2_name, plr1_name))    # 二号玩家失败。
         time.sleep(0.5)
-        print("================================================")
+        print("==================================================")
 
     exit()
 
@@ -345,5 +376,5 @@ if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:
-        print('\n', end='')
+        print('')
         exit()
