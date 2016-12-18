@@ -77,9 +77,9 @@ class Fighter(object):
         """
         print("%s 的数据："%(self.NAME))
         print("    ++============+============+============++")
-        print("    || 体力：%4d | 攻击：%4d | 防御：%4d ||"%(self.numbers["HP"], self.numbers["ATK"], self.numbers["DEF"]))
+        print("    || 体力：\033[31;1m%4d\033[0m | 攻击：\033[31;1m%4d\033[0m | 防御：\033[31;1m%4d\033[0m ||"%(self.numbers["HP"], self.numbers["ATK"], self.numbers["DEF"]))
         print("    ++------------+------------+------------++")
-        print("    || 速度：%4d | 运气：%4d | 命中：%4d ||"%(self.numbers["SPD"], self.numbers["LUK"], self.numbers["ACC"]))
+        print("    || 速度：\033[31;1m%4d\033[0m | 运气：\033[31;1m%4d\033[0m | 命中：\033[31;1m%4d\033[0m ||"%(self.numbers["SPD"], self.numbers["LUK"], self.numbers["ACC"]))
         print("    ++============+============+============++")
 
     def check(self):
@@ -109,7 +109,7 @@ class Fighter(object):
         """
         number1 = self.spawn_number(1, 0.7 * number)
         number += number1
-        print("%s 发狂了，\n上前咬了 %s 一口，\n造成了 \033[31;1m%d\033[0m 点伤害，\n自己受到反噬的 %d 点伤害。"%(self.NAME, self.ENEMY, number, number1))
+        print("%s 发狂了，\n上前咬了 %s 一口，\n造成了 \033[31;1m%d\033[0m 点伤害，\n自己受到反噬的 \033[31;1m%d\033[0m 点伤害。"%(self.NAME, self.ENEMY, number, number1))
         case_number = {"HP": number}    # 构建 dict
         self.enemy.hurt(case_number)    # 调用敌人的 hurt() 方法以处理敌方数据
         case_number = {"HP": number1}
