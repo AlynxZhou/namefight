@@ -224,6 +224,61 @@ class Fighter(object):
         }[case](number)    # 实际调用不同战斗操作。
 
 
+class Monitor(Fighter):
+    def __init__(self, name, enemy_name):
+        super(TeleBot, self).__init__(name, enemy_name)
+
+    def sbite(self, number):
+        """
+        班长的狂咬攻击，伤害为传入基本数值的 1 到 2.6 倍。自己反噬超过传入值部分的多余伤害。
+        """
+        number1 = self.spawn_number(1, 0.9 * number)
+        number2 = self.spawn_number(1, 0.7 * number)
+        print("%s 发现 %s 思修成绩不及格，发狂了，\n上前狂咬了 %s 一口，\n造成了 \033[31;1m%d\033[0m 点伤害，\n又上前狂咬了 %s 一口，\n造成了 \033[31;1m%d\033[0m 点伤害，\n又上前狂咬了 %s 一口，\n造成了 \033[31;1m%d\033[0m 点伤害，\n自己受到反噬的 \033[31;1m%d\033[0m 点伤害。"%(self.NAME, self.ENEMY, self.ENEMY, self.ENEMY, self.ENEMY, number, number1, number2))
+        case_number = {"HP": number + number1 + number2}    # 构建 dict
+        self.enemy.hurt(case_number)    # 调用敌人的 hurt() 方法以处理敌方数据
+        case_number = {"HP": number1 + number2}
+        self.hurt(case_number)    # 调用自己的 hurt() 方法来处理自身数据
+
+    def fight(self, hp_limit):
+        """
+        班长实际的战斗操作。通过 dict 与匿名函数实现 switch-case 结构。
+        """
+        number = self.spawn_number(
+            abs(
+                abs(
+                    self.numbers["ATK"] - self.enemy.numbers["DEF"]
+                ) * abs(
+                    self.numbers["LUK"] - self.enemy.numbers["LUK"]
+                ) - self.numbers["ATK"] * random.random()
+            ),
+            hp_limit
+        )    # 利用攻方的攻击力及守方的防御力以及两方的运气，生成一个计算初始值，其保证不会一击致命。
+
+        # 通过双方的命中率生成的随机值判断发起攻击成功还是失败。
+        if self.numbers["ACC"] > int((self.numbers["ACC"] + self.enemy.numbers["ACC"]) * random.random()):
+            case = random.choice(["sbite", "sbite", "sbite", "sbite", "sbite", "sbite", "sbite", "bite", "angry", "attrack", "sleep", "curse", "pray"])    # 可以发起攻击时随机选择攻击方式。
+        else:
+            number = int(number * random.random())    # 攻击无法发起时减小计算值。
+            # 判断运气值决定是否自己承受伤害。
+            if self.numbers["LUK"] > int((self.numbers["LUK"] + self.enemy.numbers["LUK"]) * random.random()):
+                case = "miss"
+            else:
+                case = "fall"
+
+        {
+            "sbite": lambda x: self.bite(x),
+            "bite": lambda x: self.bite(x),
+            "miss": lambda x: self.miss(x),
+            "fall": lambda x: self.fall(x),
+            "pray": lambda x: self.pray(x),
+            "angry": lambda x: self.angry(x),
+            "curse": lambda x: self.curse(x),
+            "attrack": lambda x: self.attrack(x),
+            "sleep": lambda x: self.sleep(x)
+        }[case](number)    # 实际调用不同战斗操作。
+
+
 def main():
     """
     运行主体。如果不能从参数中获取玩家信息，就请求输入，然后循环进行回合直至有输家产生。
@@ -238,7 +293,7 @@ def main():
         plr2_name = args.name2
 
     # 彩蛋。
-    if plr1_name == "日耳曼战神" or plr2_name == "日耳曼战神":
+    if ("日耳曼战神" in plr1_name) or ("日耳曼战神" in plr2_name):
         print("做梦吧你，日耳曼战神永远是最强的，想打赢战神？不可能！")
         exit()
 
