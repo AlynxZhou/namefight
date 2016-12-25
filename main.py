@@ -320,13 +320,16 @@ def main():
 
 	# 计算双方 HP 总和的 1 / 2 作为计算上限保证不会一击致命。
 	hp_limit = int(abs(plr1.numbers["HP"] + plr2.numbers["HP"]) / 2 * 0.5)
+	i = 0
 
 	# 进行战斗循环。
 	while ((plr1.numbers["HP"] > 0) and (plr2.numbers["HP"] > 0)):
+		i += 1
 		# 根据速度决定谁先攻击。
 		if plr1.numbers["SPD"] >= plr2.numbers["SPD"]:
 			plr1.check()
 			plr2.check()
+			print("回合 \033[31;1m#%d\033[0m:"%(i))
 			print("==================================================")
 			# 输出双方实时数据。
 			plr1.print_item()
@@ -350,6 +353,7 @@ def main():
 		elif plr1.numbers["SPD"] < plr2.numbers["SPD"]:
 			plr2.check()
 			plr1.check()
+			print("回合 \033[31;1m#%d\033[0m:"%(i))
 			print("==================================================")
 			plr2.print_item()
 			plr1.print_item()
@@ -387,7 +391,7 @@ def main():
 			plr1.print_item()
 		print("==================================================")
 		time.sleep(0.5)
-		print("%s 和 %s 棋逢对手，两败俱伤。"%(plr1_name, plr2_name))	# 平局。
+		print("经历 \033[31;1m%d\033[0m 个回合，%s 和 %s 棋逢对手，两败俱伤。"%(i, plr1_name, plr2_name))	# 平局。
 		time.sleep(0.5)
 		print("==================================================")
 	elif plr1.numbers["HP"] <= 0 and plr2.numbers["HP"] > 0:
@@ -403,7 +407,7 @@ def main():
 			plr1.print_item()
 		print("==================================================")
 		time.sleep(0.5)
-		print("%s 输了，获胜者是 %s。"%(plr1_name, plr2_name))	# 一号玩家失败。
+		print("经历 \033[31;1m%d\033[0m 个回合，%s 输了，获胜者是 %s。"%(i, plr1_name, plr2_name))	# 一号玩家失败。
 		time.sleep(0.5)
 		print("==================================================")
 	elif plr1.numbers["HP"] > 0 and plr2.numbers["HP"] <= 0:
@@ -419,7 +423,7 @@ def main():
 			plr1.print_item()
 		print("==================================================")
 		time.sleep(0.5)
-		print("%s 输了，获胜者是 %s。"%(plr2_name, plr1_name))	# 二号玩家失败。
+		print("经历 \033[31;1m%d\033[0m 个回合，%s 输了，获胜者是 %s。"%(i, plr2_name, plr1_name))	# 二号玩家失败。
 		time.sleep(0.5)
 		print("==================================================")
 
