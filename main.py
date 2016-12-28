@@ -226,7 +226,7 @@ class Fighter(object):
 
 class Monitor(Fighter):
 	def __init__(self, name, enemy_name):
-		super(TeleBot, self).__init__(name, enemy_name)
+		super(Moniter, self).__init__(name, enemy_name)
 
 	def sbite(self, number):
 		"""
