@@ -339,46 +339,47 @@ class Application(tkinter.Tk):
 			"ACC": tkinter.StringVar()
 		}
 		tkinter.Label(self.plr1_frame,\
-					  text=self.plr1_name + "的数据",\
-					  font=self.font).grid(row=0, padx=10, pady=10)
+					  text=self.plr1_name + " 的数据",\
+					  font=self.font).grid(row=0, column=0, columnspan=2, padx=30, pady=20)
 		tkinter.Label(self.plr1_frame,\
 					  text="体力",\
-					  font=self.font).grid(row=1, padx=10, pady=10)
+					  font=self.font).grid(row=1, column=0, padx=30, pady=20)
 		tkinter.Label(self.plr1_frame,\
 					  textvariable=self.plr1_data["HP"],\
-					  font=self.font).grid(row=2, padx=10, pady=10)
+					  font=self.font).grid(row=2, column=0, padx=30, pady=20)
 		tkinter.Label(self.plr1_frame,\
 					  text="攻击",\
-					  font=self.font).grid(row=3, padx=10, pady=10)
+					  font=self.font).grid(row=3, column=0, padx=30, pady=20)
 		tkinter.Label(self.plr1_frame,\
 					  textvariable=self.plr1_data["ATK"],\
-					  font=self.font).grid(row=4, padx=10, pady=10)
+					  font=self.font).grid(row=4, column=0, padx=30, pady=20)
 		tkinter.Label(self.plr1_frame,\
 					  text="防御",\
-					  font=self.font).grid(row=5, padx=10, pady=10)
+					  font=self.font).grid(row=5, column=0, padx=30, pady=20)
 		tkinter.Label(self.plr1_frame,\
 					  textvariable=self.plr1_data["DEF"],\
-					  font=self.font).grid(row=6, padx=10, pady=10)
+					  font=self.font).grid(row=6, column=0, padx=30, pady=20)
 		tkinter.Label(self.plr1_frame,\
 					  text="速度",\
-					  font=self.font).grid(row=7, padx=10, pady=10)
+					  font=self.font).grid(row=1, column=1, padx=30, pady=20)
 		tkinter.Label(self.plr1_frame,\
 					  textvariable=self.plr1_data["SPD"],\
-					  font=self.font).grid(row=8, padx=10, pady=10)
+					  font=self.font).grid(row=2, column=1, padx=30, pady=20)
 		tkinter.Label(self.plr1_frame,\
 					  text="命中",\
-					  font=self.font).grid(row=9, padx=10, pady=10)
+					  font=self.font).grid(row=3, column=1, padx=30, pady=20)
 		tkinter.Label(self.plr1_frame,\
 					  textvariable=self.plr1_data["ACC"],\
-					  font=self.font).grid(row=10, padx=10, pady=10)
+					  font=self.font).grid(row=4, column=1, padx=30, pady=20)
 		tkinter.Label(self.plr1_frame,\
 					  text="运气",\
-					  font=self.font).grid(row=11, padx=10, pady=10)
+					  font=self.font).grid(row=5, column=1, padx=30, pady=20)
 		tkinter.Label(self.plr1_frame,\
 					  textvariable=self.plr1_data["LUK"],\
-					  font=self.font).grid(row=12, padx=10, pady=10)
+					  font=self.font).grid(row=6, column=1, padx=30, pady=20)
 		# self.plr1_frame.rowconfigure(0, weight=1)
 		self.plr1_frame.columnconfigure(0, weight=1)
+		self.plr1_frame.columnconfigure(1, weight=1)
 		self.plr1_frame.grid(row=1,column=0)
 		self.plr2_frame = tkinter.Frame(self)
 		self.plr2_data = {
@@ -390,46 +391,47 @@ class Application(tkinter.Tk):
 			"ACC": tkinter.StringVar()
 		}
 		tkinter.Label(self.plr2_frame,\
-					  text=self.plr2_name + "的数据",\
-					  font=self.font).grid(row=0, padx=10, pady=10)
+					  text=self.plr2_name + " 的数据",\
+					  font=self.font).grid(row=0, column=0, columnspan=2, padx=30, pady=20)
 		tkinter.Label(self.plr2_frame,\
 					  text="体力",\
-					  font=self.font).grid(row=1, padx=10, pady=10)
+					  font=self.font).grid(row=1, column=0, padx=30, pady=20)
 		tkinter.Label(self.plr2_frame,\
 					  textvariable=self.plr2_data["HP"],\
-					  font=self.font).grid(row=2, padx=10, pady=10)
+					  font=self.font).grid(row=2, column=0, padx=30, pady=20)
 		tkinter.Label(self.plr2_frame,\
 					  text="攻击",\
-					  font=self.font).grid(row=3, padx=10, pady=10)
+					  font=self.font).grid(row=3, column=0, padx=30, pady=20)
 		tkinter.Label(self.plr2_frame,\
 					  textvariable=self.plr2_data["ATK"],\
-					  font=self.font).grid(row=4, padx=10, pady=10)
+					  font=self.font).grid(row=4, column=0, padx=30, pady=20)
 		tkinter.Label(self.plr2_frame,\
 					  text="防御",\
-					  font=self.font).grid(row=5, padx=10, pady=10)
+					  font=self.font).grid(row=5, column=0, padx=30, pady=20)
 		tkinter.Label(self.plr2_frame,\
 					  textvariable=self.plr2_data["DEF"],\
-					  font=self.font).grid(row=6, padx=10, pady=10)
+					  font=self.font).grid(row=6, column=0, padx=30, pady=20)
 		tkinter.Label(self.plr2_frame,\
 					  text="速度",\
-					  font=self.font).grid(row=7, padx=10, pady=10)
+					  font=self.font).grid(row=1, column=1, padx=30, pady=20)
 		tkinter.Label(self.plr2_frame,\
 					  textvariable=self.plr2_data["SPD"],\
-					  font=self.font).grid(row=8, padx=10, pady=10)
+					  font=self.font).grid(row=2, column=1, padx=30, pady=20)
 		tkinter.Label(self.plr2_frame,\
 					  text="命中",\
-					  font=self.font).grid(row=9, padx=10, pady=10)
+					  font=self.font).grid(row=3, column=1, padx=30, pady=20)
 		tkinter.Label(self.plr2_frame,\
 					  textvariable=self.plr2_data["ACC"],\
-					  font=self.font).grid(row=10, padx=10, pady=10)
+					  font=self.font).grid(row=4, column=1, padx=30, pady=20)
 		tkinter.Label(self.plr2_frame,\
 					  text="运气",\
-					  font=self.font).grid(row=11, padx=10, pady=10)
+					  font=self.font).grid(row=5, column=1, padx=30, pady=20)
 		tkinter.Label(self.plr2_frame,\
 					  textvariable=self.plr2_data["LUK"],\
-					  font=self.font).grid(row=12, padx=10, pady=10)
+					  font=self.font).grid(row=6, column=1, padx=30, pady=20)
 		# self.plr2_frame.rowconfigure(0, weight=1)
 		self.plr2_frame.columnconfigure(0, weight=1)
+		self.plr2_frame.columnconfigure(1, weight=1)
 		self.plr2_frame.grid(row=1,column=2)
 		self.data_update(self.plr1_data, self.plr1)
 		self.data_update(self.plr2_data, self.plr2)
