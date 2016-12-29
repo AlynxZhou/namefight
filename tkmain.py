@@ -13,19 +13,10 @@ import random
 import hashlib
 import argparse
 
-if sys.version_info.major < 3:
-	# Python2 中的 tk 系列模块。
-	import __future__
-	from Tkinter import *
-	from tkFont import Font
-	from tkMessageBox import showinfo
-	from ScrolledText import ScrolledText
-else:
-	# Python3 中的 tk 系列模块。
-	from tkinter import *
-	from tkinter.font import Font
-	from tkinter.messagebox import showinfo
-	from tkinter.scrolledtext import ScrolledText
+from tkinter import *
+from tkinter.font import Font
+from tkinter.messagebox import showinfo
+from tkinter.scrolledtext import ScrolledText
 
 
 
@@ -608,7 +599,7 @@ class Application(Tk):
 		self.plr2_name = self.name_input2.get()
 		# 检查用户名数量。
 		if (self.plr1_name == '') or (self.plr2_name == ''):
-			tkinter.messagebox.showinfo("提示", "你似乎没有把两个名字都填全哦！")
+			showinfo("提示", "你似乎没有把两个名字都填全哦！")
 			return False
 		# 开始战斗时将按钮设置为不可用。
 		self.save_button["state"] = "disable"
