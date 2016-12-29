@@ -288,7 +288,7 @@ class Application(tkinter.Tk):
 	def __init__(self, master=None):
 		super(Application, self).__init__(master)
 		self.title("Name Fight")
-		# self.geometry("800x600")
+		self.geometry("%dx%d"%(curWidth, curHeight))
 		self.resizable(width=True, height=True)
 		# TODO(请叫我喵 Alynx): Find a way to calculate the size of the window automatically via detecting the size of screen.
 		self.create_input()
