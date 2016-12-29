@@ -312,24 +312,58 @@ class Application(tkinter.Tk):
 
 	def create_data(self):
 		self.plr1_frame = tkinter.Frame(self)
+		self.plr1_data = {
+			"HP": tkinter.StringVar(),
+			"ATK": tkinter.StringVar(),
+			"DEF": tkinter.StringVar(),
+			"SPD": tkinter.StringVar(),
+			"LUK": tkinter.StringVar(),
+			"ACC": tkinter.StringVar()
+		}
 		tkinter.Label(self.plr1_frame, text=self.plr1_name).grid(row=0)
-		tkinter.Label(self.plr1_frame, text="体力：%d"%(self.plr1.numbers["HP"])).grid(row=1)
-		tkinter.Label(self.plr1_frame, text="攻击：%d"%(self.plr1.numbers["ATK"])).grid(row=2)
-		tkinter.Label(self.plr1_frame, text="防御：%d"%(self.plr1.numbers["DEF"])).grid(row=3)
-		tkinter.Label(self.plr1_frame, text="速度：%d"%(self.plr1.numbers["SPD"])).grid(row=4)
-		tkinter.Label(self.plr1_frame, text="命中：%d"%(self.plr1.numbers["ACC"])).grid(row=5)
-		tkinter.Label(self.plr1_frame, text="运气：%d"%(self.plr1.numbers["LUK"])).grid(row=6)
+		tkinter.Label(self.plr1_frame, text="体力").grid(row=1)
+		tkinter.Label(self.plr1_frame, textvariable=self.plr1_data["HP"]).grid(row=2)
+		tkinter.Label(self.plr1_frame, text="攻击").grid(row=3)
+		tkinter.Label(self.plr1_frame, textvariable=self.plr1_data["ATK"]).grid(row=4)
+		tkinter.Label(self.plr1_frame, text="防御").grid(row=5)
+		tkinter.Label(self.plr1_frame, textvariable=self.plr1_data["DEF"]).grid(row=6)
+		tkinter.Label(self.plr1_frame, text="速度").grid(row=7)
+		tkinter.Label(self.plr1_frame, textvariable=self.plr1_data["SPD"]).grid(row=8)
+		tkinter.Label(self.plr1_frame, text="命中").grid(row=9)
+		tkinter.Label(self.plr1_frame, textvariable=self.plr1_data["ACC"]).grid(row=10)
+		tkinter.Label(self.plr1_frame, text="运气").grid(row=11)
+		tkinter.Label(self.plr1_frame, textvariable=self.plr1_data["LUK"]).grid(row=12)
 		self.plr1_frame.grid(row=1,column=0)
 		self.plr2_frame = tkinter.Frame(self)
+		self.plr2_data = {
+			"HP": tkinter.StringVar(),
+			"ATK": tkinter.StringVar(),
+			"DEF": tkinter.StringVar(),
+			"SPD": tkinter.StringVar(),
+			"LUK": tkinter.StringVar(),
+			"ACC": tkinter.StringVar()
+		}
 		tkinter.Label(self.plr2_frame, text=self.plr2_name).grid(row=0)
-		tkinter.Label(self.plr2_frame, text="体力：%d"%(self.plr2.numbers["HP"])).grid(row=1)
-		tkinter.Label(self.plr2_frame, text="攻击：%d"%(self.plr2.numbers["ATK"])).grid(row=2)
-		tkinter.Label(self.plr2_frame, text="防御：%d"%(self.plr2.numbers["DEF"])).grid(row=3)
-		tkinter.Label(self.plr2_frame, text="速度：%d"%(self.plr2.numbers["SPD"])).grid(row=4)
-		tkinter.Label(self.plr2_frame, text="命中：%d"%(self.plr2.numbers["ACC"])).grid(row=5)
-		tkinter.Label(self.plr2_frame, text="运气：%d"%(self.plr2.numbers["LUK"])).grid(row=6)
+		tkinter.Label(self.plr2_frame, text="体力").grid(row=1)
+		tkinter.Label(self.plr2_frame, textvariable=self.plr2_data["HP"]).grid(row=2)
+		tkinter.Label(self.plr2_frame, text="攻击").grid(row=3)
+		tkinter.Label(self.plr2_frame, textvariable=self.plr2_data["ATK"]).grid(row=4)
+		tkinter.Label(self.plr2_frame, text="防御").grid(row=5)
+		tkinter.Label(self.plr2_frame, textvariable=self.plr2_data["DEF"]).grid(row=6)
+		tkinter.Label(self.plr2_frame, text="速度").grid(row=7)
+		tkinter.Label(self.plr2_frame, textvariable=self.plr2_data["SPD"]).grid(row=8)
+		tkinter.Label(self.plr2_frame, text="命中").grid(row=9)
+		tkinter.Label(self.plr2_frame, textvariable=self.plr2_data["ACC"]).grid(row=10)
+		tkinter.Label(self.plr2_frame, text="运气").grid(row=11)
+		tkinter.Label(self.plr2_frame, textvariable=self.plr2_data["LUK"]).grid(row=12)
 		self.plr2_frame.grid(row=1,column=2)
 		# TODO(请叫我喵 Alynx): Add two frame to display the data of fighters realtime.
+		self.data_update(self.plr1_data, self.plr1)
+		self.data_update(self.plr2_data, self.plr2)
+
+	def data_update(self, data, fighter):
+		for x in data.keys():
+			data[x].set(str(fighter.numbers[x]))
 
 	def create_text(self):
 		self.text_display = tkinter.scrolledtext.ScrolledText(self)
@@ -389,9 +423,9 @@ class Application(tkinter.Tk):
 
 		while abs(self.plr1.numbers["HP"] - self.plr2.numbers["HP"]) > 233:
 			if self.plr1.numbers["HP"] < self.plr2.numbers["HP"]:
-				self.plr1.numbers["HP"] += abs(self.plr1.numbers["HP"] - self.plr2.numbers["HP"]) * random.random()
+				self.plr1.numbers["HP"] += int(abs(self.plr1.numbers["HP"] - self.plr2.numbers["HP"]) * random.random())
 			elif self.plr2.numbers["HP"] < self.plr1.numbers["HP"]:
-				self.plr2.numbers["HP"] += abs(self.plr1.numbers["HP"] - self.plr2.numbers["HP"]) * random.random()
+				self.plr2.numbers["HP"] += int(abs(self.plr1.numbers["HP"] - self.plr2.numbers["HP"]) * random.random())
 
 		self.plr1.check()
 		self.plr2.check()
@@ -419,6 +453,7 @@ class Application(tkinter.Tk):
 				time.sleep(0.5)
 				# 先手发起攻击。
 				self.plr1.fight(hp_limit)
+				self.data_update(self.plr2_data, self.plr2)
 				# 判断是否致命。
 				if not ((self.plr1.numbers["HP"] > 0) and (self.plr2.numbers["HP"] > 0)):
 					time.sleep(0.5)
@@ -430,6 +465,7 @@ class Application(tkinter.Tk):
 				time.sleep(0.5)
 				# 后手发起攻击。
 				self.plr2.fight(hp_limit)
+				self.data_update(self.plr1_data, self.plr1)
 
 			elif self.plr1.numbers["SPD"] < self.plr2.numbers["SPD"]:
 				self.plr2.check()
@@ -441,6 +477,7 @@ class Application(tkinter.Tk):
 				# printer("==================================================")
 				time.sleep(0.5)
 				self.plr2.fight(hp_limit)
+				self.data_update(self.plr1_data, self.plr1)
 				if not ((self.plr1.numbers["HP"] > 0) and (self.plr2.numbers["HP"] > 0)):
 					time.sleep(0.5)
 					printer("==================================================")
@@ -450,6 +487,7 @@ class Application(tkinter.Tk):
 				printer("--------------------------------------------------")
 				time.sleep(0.5)
 				self.plr1.fight(hp_limit)
+				self.data_update(self.plr2_data, self.plr2)
 
 			time.sleep(0.5)
 			printer("==================================================")
@@ -463,6 +501,8 @@ class Application(tkinter.Tk):
 			if self.plr1.numbers["SPD"] >= self.plr2.numbers["SPD"]:
 				self.plr1.check()
 				self.plr2.check()
+				self.data_update(self.plr1_data, self.plr1)
+				self.data_update(self.plr2_data, self.plr2)
 				# self.plr1.print_item()
 				# self.plr2.print_item()
 			elif self.plr1.numbers["SPD"] < self.plr2.numbers["SPD"]:
@@ -470,6 +510,8 @@ class Application(tkinter.Tk):
 				self.plr1.check()
 				# self.plr2.print_item()
 				# self.plr1.print_item()
+				self.data_update(self.plr2_data, self.plr2)
+				self.data_update(self.plr1_data, self.plr1)
 				# printer("==================================================")
 				time.sleep(0.5)
 				# printer("经历 %d 个回合，%s 和 %s 棋逢对手，两败俱伤。"%(i, self.plr1_name, self.plr2_name))	# 平局。
@@ -480,11 +522,15 @@ class Application(tkinter.Tk):
 				self.plr2.check()
 				# self.plr1.print_item()
 				# self.plr2.print_item()
+				self.data_update(self.plr2_data, self.plr2)
+				self.data_update(self.plr1_data, self.plr1)
 			elif self.plr1.numbers["SPD"] < self.plr2.numbers["SPD"]:
 				self.plr2.check()
 				self.plr1.check()
 				# self.plr2.print_item()
 				# self.plr1.print_item()
+				self.data_update(self.plr2_data, self.plr2)
+				self.data_update(self.plr1_data, self.plr1)
 				# printer("==================================================")
 				time.sleep(0.5)
 				# printer("经历 %d 个回合，%s 输了，获胜者是 %s。"%(i, self.plr1_name, self.plr2_name))	# 一号玩家失败。
@@ -495,11 +541,15 @@ class Application(tkinter.Tk):
 				self.plr2.check()
 				# self.plr1.print_item()
 				# self.plr2.print_item()
+				self.data_update(self.plr1_data, self.plr1)
+				self.data_update(self.plr2_data, self.plr2)
 			elif self.plr1.numbers["SPD"] < self.plr2.numbers["SPD"]:
 				self.plr2.check()
 				self.plr1.check()
 				# self.plr2.print_item()
 				# self.plr1.print_item()
+				self.data_update(self.plr2_data, self.plr2)
+				self.data_update(self.plr1_data, self.plr1)
 				# printer("==================================================")
 				time.sleep(0.5)
 				# printer("经历 %d 个回合，%s 输了，获胜者是 %s。"%(i, self.plr2_name, self.plr1_name))	# 二号玩家失败。
