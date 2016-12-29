@@ -513,6 +513,7 @@ class Application(tkinter.Tk):
 				time.sleep(0.5)
 				# 先手发起攻击。
 				self.plr1.fight(hp_limit)
+				self.data_update(self.plr1_data, self.plr1)
 				self.data_update(self.plr2_data, self.plr2)
 				# 判断是否致命。
 				if not ((self.plr1.numbers["HP"] > 0) and (self.plr2.numbers["HP"] > 0)):
@@ -526,6 +527,7 @@ class Application(tkinter.Tk):
 				# 后手发起攻击。
 				self.plr2.fight(hp_limit)
 				self.data_update(self.plr1_data, self.plr1)
+				self.data_update(self.plr2_data, self.plr2)
 
 			elif self.plr1.numbers["SPD"] < self.plr2.numbers["SPD"]:
 				self.plr2.check()
@@ -538,6 +540,7 @@ class Application(tkinter.Tk):
 				time.sleep(0.5)
 				self.plr2.fight(hp_limit)
 				self.data_update(self.plr1_data, self.plr1)
+				self.data_update(self.plr2_data, self.plr2)
 				if not ((self.plr1.numbers["HP"] > 0) and (self.plr2.numbers["HP"] > 0)):
 					time.sleep(0.5)
 					printer("================================================================================")
@@ -548,6 +551,7 @@ class Application(tkinter.Tk):
 				time.sleep(0.5)
 				self.plr1.fight(hp_limit)
 				self.data_update(self.plr2_data, self.plr2)
+				self.data_update(self.plr1_data, self.plr1)
 
 			time.sleep(0.5)
 			printer("================================================================================")
