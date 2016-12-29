@@ -16,6 +16,7 @@ if sys.version_info.major < 3:
 	import __future__
 
 import tkinter
+import tkinter.font
 import tkinter.messagebox
 import tkinter.scrolledtext
 
@@ -288,26 +289,27 @@ class Application(tkinter.Tk):
 	def __init__(self, master=None):
 		super(Application, self).__init__(master)
 		self.title("Name Fight")
-		self.geometry("%dx%d"%(curWidth, curHeight))
-		self.resizable(width=True, height=True)
+		# self.geometry("%dx%d"%(self.winfo_screenwidth() / 2, self.winfo_screenheight() / 2))
+		# self.resizable(width=True, height=True)
+		self.font = tkinter.font.Font(self, family="Sans", size=13)
 		# TODO(请叫我喵 Alynx): Find a way to calculate the size of the window automatically via detecting the size of screen.
 		self.create_input()
 		self.create_text()
 
 	def create_input(self):
 		self.input_frame1 = tkinter.Frame(self)
-		tkinter.Label(self.input_frame1, text="请输入第一个玩家的名字：").grid(row=0)
-		self.name_input1 = tkinter.Entry(self.input_frame1)
+		tkinter.Label(self.input_frame1, text="请输入第一个玩家的名字：", font=self.font).grid(row=0)
+		self.name_input1 = tkinter.Entry(self.input_frame1, font=self.font)
 		self.name_input1.grid(row=1)
 		self.input_frame1.grid(row=0, column=0, pady=10)
 		#self.name_input1.bind(sequence="<Enter>", func=self.callback)
 		self.input_frame2 = tkinter.Frame(self)
-		tkinter.Label(self.input_frame2, text="请输入第二个玩家的名字：").grid(row=0)
-		self.name_input2 = tkinter.Entry(self.input_frame2)
+		tkinter.Label(self.input_frame2, text="请输入第二个玩家的名字：", font=self.font).grid(row=0)
+		self.name_input2 = tkinter.Entry(self.input_frame2, font=self.font)
 		self.name_input2.grid(row=1)
 		self.input_frame2.grid(row=0, column=2, pady=10)
 		#self.name_input2.bind(sequence="<Enter>", func=self.callback)
-		self.save_button = tkinter.Button(self, text="开始对战！", state="normal", command=self.callback)
+		self.save_button = tkinter.Button(self, text="开始对战！", state="normal", command=self.callback, font=self.font)
 		self.save_button.grid(row=0, column=1, pady=10)
 
 	def create_data(self):
@@ -320,20 +322,20 @@ class Application(tkinter.Tk):
 			"LUK": tkinter.StringVar(),
 			"ACC": tkinter.StringVar()
 		}
-		tkinter.Label(self.plr1_frame, text=self.plr1_name).grid(row=0)
-		tkinter.Label(self.plr1_frame, text="体力").grid(row=1)
-		tkinter.Label(self.plr1_frame, textvariable=self.plr1_data["HP"]).grid(row=2)
-		tkinter.Label(self.plr1_frame, text="攻击").grid(row=3)
-		tkinter.Label(self.plr1_frame, textvariable=self.plr1_data["ATK"]).grid(row=4)
-		tkinter.Label(self.plr1_frame, text="防御").grid(row=5)
-		tkinter.Label(self.plr1_frame, textvariable=self.plr1_data["DEF"]).grid(row=6)
-		tkinter.Label(self.plr1_frame, text="速度").grid(row=7)
-		tkinter.Label(self.plr1_frame, textvariable=self.plr1_data["SPD"]).grid(row=8)
-		tkinter.Label(self.plr1_frame, text="命中").grid(row=9)
-		tkinter.Label(self.plr1_frame, textvariable=self.plr1_data["ACC"]).grid(row=10)
-		tkinter.Label(self.plr1_frame, text="运气").grid(row=11)
-		tkinter.Label(self.plr1_frame, textvariable=self.plr1_data["LUK"]).grid(row=12)
-		self.plr1_frame.grid(row=1,column=0)
+		tkinter.Label(self.plr1_frame, text=self.plr1_name, font=self.font).grid(row=0)
+		tkinter.Label(self.plr1_frame, text="体力", font=self.font).grid(row=1)
+		tkinter.Label(self.plr1_frame, textvariable=self.plr1_data["HP"], font=self.font).grid(row=2)
+		tkinter.Label(self.plr1_frame, text="攻击", font=self.font).grid(row=3)
+		tkinter.Label(self.plr1_frame, textvariable=self.plr1_data["ATK"], font=self.font).grid(row=4)
+		tkinter.Label(self.plr1_frame, text="防御", font=self.font).grid(row=5)
+		tkinter.Label(self.plr1_frame, textvariable=self.plr1_data["DEF"], font=self.font).grid(row=6)
+		tkinter.Label(self.plr1_frame, text="速度", font=self.font).grid(row=7)
+		tkinter.Label(self.plr1_frame, textvariable=self.plr1_data["SPD"], font=self.font).grid(row=8)
+		tkinter.Label(self.plr1_frame, text="命中", font=self.font).grid(row=9)
+		tkinter.Label(self.plr1_frame, textvariable=self.plr1_data["ACC"], font=self.font).grid(row=10)
+		tkinter.Label(self.plr1_frame, text="运气", font=self.font).grid(row=11)
+		tkinter.Label(self.plr1_frame, textvariable=self.plr1_data["LUK"], font=self.font).grid(row=12)
+		self.plr1_frame.grid(row=1,column=0, sticky="nsew")
 		self.plr2_frame = tkinter.Frame(self)
 		self.plr2_data = {
 			"HP": tkinter.StringVar(),
@@ -343,21 +345,20 @@ class Application(tkinter.Tk):
 			"LUK": tkinter.StringVar(),
 			"ACC": tkinter.StringVar()
 		}
-		tkinter.Label(self.plr2_frame, text=self.plr2_name).grid(row=0)
-		tkinter.Label(self.plr2_frame, text="体力").grid(row=1)
-		tkinter.Label(self.plr2_frame, textvariable=self.plr2_data["HP"]).grid(row=2)
-		tkinter.Label(self.plr2_frame, text="攻击").grid(row=3)
-		tkinter.Label(self.plr2_frame, textvariable=self.plr2_data["ATK"]).grid(row=4)
-		tkinter.Label(self.plr2_frame, text="防御").grid(row=5)
-		tkinter.Label(self.plr2_frame, textvariable=self.plr2_data["DEF"]).grid(row=6)
-		tkinter.Label(self.plr2_frame, text="速度").grid(row=7)
-		tkinter.Label(self.plr2_frame, textvariable=self.plr2_data["SPD"]).grid(row=8)
-		tkinter.Label(self.plr2_frame, text="命中").grid(row=9)
-		tkinter.Label(self.plr2_frame, textvariable=self.plr2_data["ACC"]).grid(row=10)
-		tkinter.Label(self.plr2_frame, text="运气").grid(row=11)
-		tkinter.Label(self.plr2_frame, textvariable=self.plr2_data["LUK"]).grid(row=12)
-		self.plr2_frame.grid(row=1,column=2)
-		# TODO(请叫我喵 Alynx): Add two frame to display the data of fighters realtime.
+		tkinter.Label(self.plr2_frame, text=self.plr2_name, font=self.font).grid(row=0)
+		tkinter.Label(self.plr2_frame, text="体力", font=self.font).grid(row=1)
+		tkinter.Label(self.plr2_frame, textvariable=self.plr2_data["HP"], font=self.font).grid(row=2)
+		tkinter.Label(self.plr2_frame, text="攻击", font=self.font).grid(row=3)
+		tkinter.Label(self.plr2_frame, textvariable=self.plr2_data["ATK"], font=self.font).grid(row=4)
+		tkinter.Label(self.plr2_frame, text="防御", font=self.font).grid(row=5)
+		tkinter.Label(self.plr2_frame, textvariable=self.plr2_data["DEF"], font=self.font).grid(row=6)
+		tkinter.Label(self.plr2_frame, text="速度", font=self.font).grid(row=7)
+		tkinter.Label(self.plr2_frame, textvariable=self.plr2_data["SPD"], font=self.font).grid(row=8)
+		tkinter.Label(self.plr2_frame, text="命中", font=self.font).grid(row=9)
+		tkinter.Label(self.plr2_frame, textvariable=self.plr2_data["ACC"], font=self.font).grid(row=10)
+		tkinter.Label(self.plr2_frame, text="运气", font=self.font).grid(row=11)
+		tkinter.Label(self.plr2_frame, textvariable=self.plr2_data["LUK"], font=self.font).grid(row=12)
+		self.plr2_frame.grid(row=1,column=2, sticky="nsew")
 		self.data_update(self.plr1_data, self.plr1)
 		self.data_update(self.plr2_data, self.plr2)
 
@@ -366,9 +367,9 @@ class Application(tkinter.Tk):
 			data[x].set(str(fighter.numbers[x]))
 
 	def create_text(self):
-		self.text_display = tkinter.scrolledtext.ScrolledText(self)
+		self.text_display = tkinter.scrolledtext.ScrolledText(self, font=self.font)
 		self.text_display.bind("<KeyPress>", lambda e : "break")
-		self.text_display.grid(row=1, column=1)
+		self.text_display.grid(row=1, column=1, sticky="nsew")
 
 	def text_print(self, str):
 		self.text_display.insert(tkinter.INSERT, str + '\n')
