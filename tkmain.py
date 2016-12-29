@@ -402,10 +402,10 @@ class Application(Tk):
 		"""
 		if args.name1 != None:
 			# 可以直接对 Entry() 对象使用 insert() 方法插入数据。
-			self.name_input1.insert(tkinter.END, args.name1)
+			self.name_input1.insert(END, args.name1)
 			self.name_input1.update()
 		if args.name2 != None:
-			self.name_input2.insert(tkinter.END, args.name2)
+			self.name_input2.insert(END, args.name2)
 			self.name_input2.update()
 		if (args.name1 != None) and (args.name2 != None):
 			# 如果两个参数都满足就直接调用 callback() 方法去处理，不需要点击按钮。
