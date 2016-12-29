@@ -292,25 +292,45 @@ class Application(tkinter.Tk):
 		# self.geometry("%dx%d"%(self.winfo_screenwidth() / 2, self.winfo_screenheight() / 2))
 		# self.resizable(width=True, height=True)
 		self.font = tkinter.font.Font(self, family="Sans", size=13)
+		self.rowconfigure(0, weight=1)
+		self.rowconfigure(1, weight=2)
+		self.columnconfigure(0, weight=1)
+		self.columnconfigure(1, weight=2)
+		self.columnconfigure(2, weight=1)
 		# TODO(请叫我喵 Alynx): Find a way to calculate the size of the window automatically via detecting the size of screen.
 		self.create_input()
 		self.create_text()
+		self.parse_args(args)
+
+	def parse_args(self, args):
+		if args.name1 != None:
+			self.name_input1.insert(tkinter.INSERT, args.name1)
+			self.name_input1.update()
+		if args.name2 != None:
+			self.name_input2.insert(tkinter.INSERT, args.name2)
+			self.name_input2.update()
+		if (args.name1 != None) and (args.name2 != None):
+			self.callback()
 
 	def create_input(self):
 		self.input_frame1 = tkinter.Frame(self)
 		tkinter.Label(self.input_frame1, text="请输入第一个玩家的名字：", font=self.font).grid(row=0)
 		self.name_input1 = tkinter.Entry(self.input_frame1, font=self.font)
 		self.name_input1.grid(row=1)
+		self.input_frame1.rowconfigure(0, weight=1)
+		self.input_frame1.columnconfigure (0, weight=1)
 		self.input_frame1.grid(row=0, column=0, pady=10)
 		#self.name_input1.bind(sequence="<Enter>", func=self.callback)
+		self.save_button = tkinter.Button(self, text="开始对战！", state="normal", command=self.callback, font=self.font)
+		self.save_button.grid(row=0, column=1, pady=10)
 		self.input_frame2 = tkinter.Frame(self)
 		tkinter.Label(self.input_frame2, text="请输入第二个玩家的名字：", font=self.font).grid(row=0)
 		self.name_input2 = tkinter.Entry(self.input_frame2, font=self.font)
 		self.name_input2.grid(row=1)
+		self.input_frame1.rowconfigure(0, weight=1)
+		self.input_frame1.columnconfigure (0, weight=1)
 		self.input_frame2.grid(row=0, column=2, pady=10)
 		#self.name_input2.bind(sequence="<Enter>", func=self.callback)
-		self.save_button = tkinter.Button(self, text="开始对战！", state="normal", command=self.callback, font=self.font)
-		self.save_button.grid(row=0, column=1, pady=10)
 
 	def create_data(self):
 		self.plr1_frame = tkinter.Frame(self)
@@ -335,6 +355,8 @@ class Application(tkinter.Tk):
 		tkinter.Label(self.plr1_frame, textvariable=self.plr1_data["ACC"], font=self.font).grid(row=10)
 		tkinter.Label(self.plr1_frame, text="运气", font=self.font).grid(row=11)
 		tkinter.Label(self.plr1_frame, textvariable=self.plr1_data["LUK"], font=self.font).grid(row=12)
+		# self.plr1_frame.rowconfigure(0, weight=1)
+		self.plr1_frame.columnconfigure (0, weight=1)
 		self.plr1_frame.grid(row=1,column=0, sticky="nsew")
 		self.plr2_frame = tkinter.Frame(self)
 		self.plr2_data = {
@@ -358,6 +380,8 @@ class Application(tkinter.Tk):
 		tkinter.Label(self.plr2_frame, textvariable=self.plr2_data["ACC"], font=self.font).grid(row=10)
 		tkinter.Label(self.plr2_frame, text="运气", font=self.font).grid(row=11)
 		tkinter.Label(self.plr2_frame, textvariable=self.plr2_data["LUK"], font=self.font).grid(row=12)
+		# self.plr2_frame.rowconfigure(0, weight=1)
+		self.plr2_frame.columnconfigure (0, weight=1)
 		self.plr2_frame.grid(row=1,column=2, sticky="nsew")
 		self.data_update(self.plr1_data, self.plr1)
 		self.data_update(self.plr2_data, self.plr2)
