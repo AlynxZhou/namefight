@@ -312,7 +312,23 @@ class Application(tkinter.Tk):
 
 	def create_data(self):
 		self.plr1_frame = tkinter.Frame(self)
-		tkinter.Label(self.plr1_frame, text)
+		tkinter.Label(self.plr1_frame, text=self.plr1_name).grid(row=0)
+		tkinter.Label(self.plr1_frame, text="体力：%d"%(self.plr1.numbers["HP"])).grid(row=1)
+		tkinter.Label(self.plr1_frame, text="攻击：%d"%(self.plr1.numbers["ATK"])).grid(row=2)
+		tkinter.Label(self.plr1_frame, text="防御：%d"%(self.plr1.numbers["DEF"])).grid(row=3)
+		tkinter.Label(self.plr1_frame, text="速度：%d"%(self.plr1.numbers["SPD"])).grid(row=4)
+		tkinter.Label(self.plr1_frame, text="命中：%d"%(self.plr1.numbers["ACC"])).grid(row=5)
+		tkinter.Label(self.plr1_frame, text="运气：%d"%(self.plr1.numbers["LUK"])).grid(row=6)
+		self.plr1_frame.grid(row=1,column=0)
+		self.plr2_frame = tkinter.Frame(self)
+		tkinter.Label(self.plr2_frame, text=self.plr2_name).grid(row=0)
+		tkinter.Label(self.plr2_frame, text="体力：%d"%(self.plr2.numbers["HP"])).grid(row=1)
+		tkinter.Label(self.plr2_frame, text="攻击：%d"%(self.plr2.numbers["ATK"])).grid(row=2)
+		tkinter.Label(self.plr2_frame, text="防御：%d"%(self.plr2.numbers["DEF"])).grid(row=3)
+		tkinter.Label(self.plr2_frame, text="速度：%d"%(self.plr2.numbers["SPD"])).grid(row=4)
+		tkinter.Label(self.plr2_frame, text="命中：%d"%(self.plr2.numbers["ACC"])).grid(row=5)
+		tkinter.Label(self.plr2_frame, text="运气：%d"%(self.plr2.numbers["LUK"])).grid(row=6)
+		self.plr2_frame.grid(row=1,column=2)
 		# TODO(请叫我喵 Alynx): Add two frame to display the data of fighters realtime.
 
 	def create_text(self):
@@ -326,21 +342,21 @@ class Application(tkinter.Tk):
 		self.text_display.see(tkinter.INSERT)
 
 	def callback(self, event=None):
-		plr1_name = self.name_input1.get()
-		plr2_name = self.name_input2.get()
-		if (plr1_name == '') or (plr2_name == ''):
+		self.plr1_name = self.name_input1.get()
+		self.plr2_name = self.name_input2.get()
+		if (self.plr1_name == '') or (self.plr2_name == ''):
 			tkinter.messagebox.showinfo("提示", "你似乎没有把两个名字都填全哦！")
 			return False
 		self.save_button["state"] = "disable"
-		self.text_print(plr1_name + ' ' + "VS" + ' ' + plr2_name)
-		self.result = self.main(plr1_name, plr2_name, self.text_print)
+		self.text_print(self.plr1_name + ' ' + "VS" + ' ' + self.plr2_name)
+		self.result = self.main(self.text_print)
 		tkinter.messagebox.showinfo("Game Over!", self.result)
 		self.save_button["state"] = "normal"
 		# TODO(请叫我喵 Alynx):
 		# 1. Add a messagebox to show the winner.
 		# 2. Let the button normal after one time of game finished.
 
-	def main(self, plr1_name=None, plr2_name=None, printer=print):
+	def main(self, printer=print):
 		# TODO(请叫我喵 Alynx): Let this become a private method of Application?
 		"""
 		运行主体。如果不能从参数中获取玩家信息，就请求输入，然后循环进行回合直至有输家产生。
@@ -364,44 +380,47 @@ class Application(tkinter.Tk):
 		# plr2_name = "\033[33;1m" + plr2_name + "\033[0m"
 
 		# 生成 Fighter 对象。
-		plr1 = Fighter(plr1_name, plr2_name, printer)
-		plr2 = Fighter(plr2_name, plr1_name, printer)
+		self.plr1 = Fighter(self.plr1_name, self.plr2_name, printer)
+		self.plr2 = Fighter(self.plr2_name, self.plr1_name, printer)
 
 		# 获取敌对对象。
-		plr1.get_enemy(plr2)
-		plr2.get_enemy(plr1)
+		self.plr1.get_enemy(self.plr2)
+		self.plr2.get_enemy(self.plr1)
 
-		while abs(plr1.numbers["HP"] - plr2.numbers["HP"]) > 233:
-			if plr1.numbers["HP"] < plr2.numbers["HP"]:
-				plr1.numbers["HP"] += abs(plr1.numbers["HP"] - plr2.numbers["HP"]) * random.random()
-			elif plr2.numbers["HP"] < plr1.numbers["HP"]:
-				plr2.numbers["HP"] += abs(plr1.numbers["HP"] - plr2.numbers["HP"]) * random.random()
+		while abs(self.plr1.numbers["HP"] - self.plr2.numbers["HP"]) > 233:
+			if self.plr1.numbers["HP"] < self.plr2.numbers["HP"]:
+				self.plr1.numbers["HP"] += abs(self.plr1.numbers["HP"] - self.plr2.numbers["HP"]) * random.random()
+			elif self.plr2.numbers["HP"] < self.plr1.numbers["HP"]:
+				self.plr2.numbers["HP"] += abs(self.plr1.numbers["HP"] - self.plr2.numbers["HP"]) * random.random()
 
-		plr1.check()
-		plr2.check()
+		self.plr1.check()
+		self.plr2.check()
 
 		# 计算双方 HP 总和的 1 / 2 作为计算上限保证不会一击致命。
-		hp_limit = int(abs(plr1.numbers["HP"] + plr2.numbers["HP"]) / 2 * 0.5)
+		hp_limit = int(abs(self.plr1.numbers["HP"] + self.plr2.numbers["HP"]) / 2 * 0.5)
 		i = 0
 
+		self.create_data()
+		printer("==================================================")
+
 		# 进行战斗循环。
-		while ((plr1.numbers["HP"] > 0) and (plr2.numbers["HP"] > 0)):
+		while ((self.plr1.numbers["HP"] > 0) and (self.plr2.numbers["HP"] > 0)):
 			i += 1
 			# 根据速度决定谁先攻击。
-			if plr1.numbers["SPD"] >= plr2.numbers["SPD"]:
-				plr1.check()
-				plr2.check()
+			if self.plr1.numbers["SPD"] >= self.plr2.numbers["SPD"]:
+				self.plr1.check()
+				self.plr2.check()
 				printer("回合 #%d:"%(i))
 				printer("==================================================")
-				# 输出双方实时数据。
-				plr1.print_item()
-				plr2.print_item()
-				printer("==================================================")
+				# # 输出双方实时数据。
+				# self.plr1.print_item()
+				# self.plr2.print_item()
+				# printer("==================================================")
 				time.sleep(0.5)
 				# 先手发起攻击。
-				plr1.fight(hp_limit)
+				self.plr1.fight(hp_limit)
 				# 判断是否致命。
-				if not ((plr1.numbers["HP"] > 0) and (plr2.numbers["HP"] > 0)):
+				if not ((self.plr1.numbers["HP"] > 0) and (self.plr2.numbers["HP"] > 0)):
 					time.sleep(0.5)
 					printer("==================================================")
 					time.sleep(0.5)
@@ -410,19 +429,19 @@ class Application(tkinter.Tk):
 				printer("--------------------------------------------------")
 				time.sleep(0.5)
 				# 后手发起攻击。
-				plr2.fight(hp_limit)
+				self.plr2.fight(hp_limit)
 
-			elif plr1.numbers["SPD"] < plr2.numbers["SPD"]:
-				plr2.check()
-				plr1.check()
+			elif self.plr1.numbers["SPD"] < self.plr2.numbers["SPD"]:
+				self.plr2.check()
+				self.plr1.check()
 				printer("回合 #%d:"%(i))
 				printer("==================================================")
-				plr2.print_item()
-				plr1.print_item()
-				printer("==================================================")
+				# self.plr2.print_item()
+				# self.plr1.print_item()
+				# printer("==================================================")
 				time.sleep(0.5)
-				plr2.fight(hp_limit)
-				if not ((plr1.numbers["HP"] > 0) and (plr2.numbers["HP"] > 0)):
+				self.plr2.fight(hp_limit)
+				if not ((self.plr1.numbers["HP"] > 0) and (self.plr2.numbers["HP"] > 0)):
 					time.sleep(0.5)
 					printer("==================================================")
 					time.sleep(0.5)
@@ -430,61 +449,61 @@ class Application(tkinter.Tk):
 				time.sleep(0.5)
 				printer("--------------------------------------------------")
 				time.sleep(0.5)
-				plr1.fight(hp_limit)
+				self.plr1.fight(hp_limit)
 
 			time.sleep(0.5)
 			printer("==================================================")
 			time.sleep(0.5)
 
-		printer("==================================================")
+		#printer("==================================================")
 
 		# 判断结果。
-		if plr1.numbers["HP"] <= 0 and plr2.numbers["HP"] <= 0:
+		if self.plr1.numbers["HP"] <= 0 and self.plr2.numbers["HP"] <= 0:
 			# 输出双方最终数据
-			if plr1.numbers["SPD"] >= plr2.numbers["SPD"]:
-				plr1.check()
-				plr2.check()
-				plr1.print_item()
-				plr2.print_item()
-			elif plr1.numbers["SPD"] < plr2.numbers["SPD"]:
-				plr2.check()
-				plr1.check()
-				plr2.print_item()
-				plr1.print_item()
-				printer("==================================================")
+			if self.plr1.numbers["SPD"] >= self.plr2.numbers["SPD"]:
+				self.plr1.check()
+				self.plr2.check()
+				# self.plr1.print_item()
+				# self.plr2.print_item()
+			elif self.plr1.numbers["SPD"] < self.plr2.numbers["SPD"]:
+				self.plr2.check()
+				self.plr1.check()
+				# self.plr2.print_item()
+				# self.plr1.print_item()
+				# printer("==================================================")
 				time.sleep(0.5)
-				# printer("经历 %d 个回合，%s 和 %s 棋逢对手，两败俱伤。"%(i, plr1_name, plr2_name))	# 平局。
-				return "经历 %d 个回合，%s 和 %s 棋逢对手，两败俱伤。"%(i, plr1_name, plr2_name)	# 平局。
-		elif plr1.numbers["HP"] <= 0 and plr2.numbers["HP"] > 0:
-			if plr1.numbers["SPD"] >= plr2.numbers["SPD"]:
-				plr1.check()
-				plr2.check()
-				plr1.print_item()
-				plr2.print_item()
-			elif plr1.numbers["SPD"] < plr2.numbers["SPD"]:
-				plr2.check()
-				plr1.check()
-				plr2.print_item()
-				plr1.print_item()
-				printer("==================================================")
+				# printer("经历 %d 个回合，%s 和 %s 棋逢对手，两败俱伤。"%(i, self.plr1_name, self.plr2_name))	# 平局。
+				return "经历 %d 个回合，%s 和 %s 棋逢对手，两败俱伤。"%(i, self.plr1_name, self.plr2_name)	# 平局。
+		elif self.plr1.numbers["HP"] <= 0 and self.plr2.numbers["HP"] > 0:
+			if self.plr1.numbers["SPD"] >= self.plr2.numbers["SPD"]:
+				self.plr1.check()
+				self.plr2.check()
+				# self.plr1.print_item()
+				# self.plr2.print_item()
+			elif self.plr1.numbers["SPD"] < self.plr2.numbers["SPD"]:
+				self.plr2.check()
+				self.plr1.check()
+				# self.plr2.print_item()
+				# self.plr1.print_item()
+				# printer("==================================================")
 				time.sleep(0.5)
-				# printer("经历 %d 个回合，%s 输了，获胜者是 %s。"%(i, plr1_name, plr2_name))	# 一号玩家失败。
-				return "经历 %d 个回合，%s 输了，获胜者是 %s。"%(i, plr1_name, plr2_name)	# 一号玩家失败。
-		elif plr1.numbers["HP"] > 0 and plr2.numbers["HP"] <= 0:
-			if plr1.numbers["SPD"] >= plr2.numbers["SPD"]:
-				plr1.check()
-				plr2.check()
-				plr1.print_item()
-				plr2.print_item()
-			elif plr1.numbers["SPD"] < plr2.numbers["SPD"]:
-				plr2.check()
-				plr1.check()
-				plr2.print_item()
-				plr1.print_item()
-				printer("==================================================")
+				# printer("经历 %d 个回合，%s 输了，获胜者是 %s。"%(i, self.plr1_name, self.plr2_name))	# 一号玩家失败。
+				return "经历 %d 个回合，%s 输了，获胜者是 %s。"%(i, self.plr1_name, self.plr2_name)	# 一号玩家失败。
+		elif self.plr1.numbers["HP"] > 0 and self.plr2.numbers["HP"] <= 0:
+			if self.plr1.numbers["SPD"] >= self.plr2.numbers["SPD"]:
+				self.plr1.check()
+				self.plr2.check()
+				# self.plr1.print_item()
+				# self.plr2.print_item()
+			elif self.plr1.numbers["SPD"] < self.plr2.numbers["SPD"]:
+				self.plr2.check()
+				self.plr1.check()
+				# self.plr2.print_item()
+				# self.plr1.print_item()
+				# printer("==================================================")
 				time.sleep(0.5)
-				# printer("经历 %d 个回合，%s 输了，获胜者是 %s。"%(i, plr2_name, plr1_name))	# 二号玩家失败。
-				return "经历 %d 个回合，%s 输了，获胜者是 %s。"%(i, plr2_name, plr1_name)	# 二号玩家失败。
+				# printer("经历 %d 个回合，%s 输了，获胜者是 %s。"%(i, self.plr2_name, self.plr1_name))	# 二号玩家失败。
+				return "经历 %d 个回合，%s 输了，获胜者是 %s。"%(i, self.plr2_name, self.plr1_name)	# 二号玩家失败。
 
 root = Application()
 root.mainloop()
