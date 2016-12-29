@@ -12,9 +12,6 @@ import random
 import hashlib
 import argparse
 
-if sys.version_info.major < 3:
-	import __future__
-
 import tkinter
 import tkinter.font
 import tkinter.messagebox
@@ -114,7 +111,7 @@ class Fighter(object):
 		"""
 		number1 = self.spawn_number(1, 0.7 * number)
 		number += number1
-		self.printer("%s 发狂了，\n上前咬了 %s 一口，\n造成了 %d 点伤害，\n自己受到反噬的 %d 点伤害。"%(self.NAME, self.ENEMY, number, number1))
+		self.printer("%s 发狂了，上前咬了 %s 一口，造成了 %d 点伤害，自己受到反噬的 %d 点伤害。"%(self.NAME, self.ENEMY, number, number1))
 		case_number = {"HP": number}	# 构建 dict
 		self.enemy.hurt(case_number)	# 调用敌人的 hurt() 方法以处理敌方数据
 		case_number = {"HP": number1}
@@ -124,7 +121,7 @@ class Fighter(object):
 		"""
 		催眠回血，恢复传入值大小的体力。
 		"""
-		self.printer("%s 给 %s 唱了安眠曲，\n%s 睡着了，\n%s 趁机恢复了 %d 点体力。"%(self.NAME, self.ENEMY, self.ENEMY, self.NAME, number))
+		self.printer("%s 给 %s 唱了安眠曲，%s 睡着了，%s 趁机恢复了 %d 点体力。"%(self.NAME, self.ENEMY, self.ENEMY, self.NAME, number))
 		number = - number
 		case_number = {"HP": number}
 		self.hurt(case_number)
@@ -133,7 +130,7 @@ class Fighter(object):
 		"""
 		诅咒，降低对方除体力外的的所有战斗力，降低的随机值不大于对方已有的值。
 		"""
-		self.printer("%s 诅咒了 %s，\n%s 的各项数值下降了。"%(self.NAME, self.ENEMY, self.ENEMY))
+		self.printer("%s 诅咒了 %s，%s 的各项数值下降了。"%(self.NAME, self.ENEMY, self.ENEMY))
 		case_number = {
 			"ATK": self.spawn_number(number / 4, self.enemy.numbers["ATK"] * 0.7),
 			"DEF": self.spawn_number(number / 4, self.enemy.numbers["DEF"] * 0.7),
@@ -147,7 +144,7 @@ class Fighter(object):
 		"""
 		祈祷，增加自己除体力外的所有战斗力，增加的随机值不大于自己以有的值的 1.5 倍。
 		"""
-		self.printer("%s 向上天祈祷，\n%s 的各项数值上升了。"%(self.NAME, self.NAME))
+		self.printer("%s 向上天祈祷，%s 的各项数值上升了。"%(self.NAME, self.NAME))
 		case_number = {
 			"ATK": - self.spawn_number(number / 3, self.numbers["ATK"] * 3 / 2),
 			"DEF": - self.spawn_number(number / 3, self.numbers["DEF"] * 3 / 2),
@@ -163,7 +160,7 @@ class Fighter(object):
 		"""
 		number1 = self.spawn_number(1, 0.6 * number)
 		number2 = self.spawn_number(1, 0.3 * number)
-		self.printer("%s 发怒了，\n把 %s 按在地上一顿暴打，\n%s 受到了 %d 点伤害，\n%s 受到了 %d 点伤害，\n%s 受到了 %d 点伤害，\n%s 挣脱了。"%(self.NAME, self.ENEMY, self.ENEMY, number, self.ENEMY, number1, self.ENEMY, number2, self.ENEMY))
+		self.printer("%s 发怒了，把 %s 按在地上一顿暴打，%s 受到了 %d 点伤害，%s 受到了 %d 点伤害，%s 受到了 %d 点伤害，%s 挣脱了。"%(self.NAME, self.ENEMY, self.ENEMY, number, self.ENEMY, number1, self.ENEMY, number2, self.ENEMY))
 		number = number + number1 + number2
 		case_number = {"HP": number}
 		self.enemy.hurt(case_number)
@@ -172,7 +169,7 @@ class Fighter(object):
 		"""
 		普通攻击，给予对方传入值大小的伤害。
 		"""
-		self.printer("%s 向 %s 发起了攻击，\n%s 受到了 %d 点伤害。"%(self.NAME, self.ENEMY, self.ENEMY, number))
+		self.printer("%s 向 %s 发起了攻击，%s 受到了 %d 点伤害。"%(self.NAME, self.ENEMY, self.ENEMY, number))
 		case_number = {"HP": number}
 		self.enemy.hurt(case_number)
 
@@ -181,7 +178,7 @@ class Fighter(object):
 		摔倒，随机发生在自己发起攻击，但命中率与运气值都较低的情况下，自己受到不大于传入值 50% 的伤害。
 		"""
 		number = self.spawn_number(1, 0.5 * number)
-		self.printer("%s 向 %s 发起攻击，\n但是被 %s 绊倒了，\n%s 受到了 %d 点伤害。"%(self.NAME, self.ENEMY, self.ENEMY, self.NAME, number))
+		self.printer("%s 向 %s 发起攻击，但是被 %s 绊倒了，%s 受到了 %d 点伤害。"%(self.NAME, self.ENEMY, self.ENEMY, self.NAME, number))
 		case_number = {"HP": number}
 		self.hurt(case_number)
 
@@ -189,7 +186,7 @@ class Fighter(object):
 		"""
 		未击中，随机发生在自己发起攻击，但命中率较低而运气值又较高的情况下，双方均不承受伤害。
 		"""
-		self.printer("%s 向 %s 发起了攻击，\n但是被 %s 躲开了。"%(self.NAME, self.ENEMY, self.ENEMY))
+		self.printer("%s 向 %s 发起了攻击，但是被 %s 躲开了。"%(self.NAME, self.ENEMY, self.ENEMY))
 
 	def fight(self, hp_limit):
 		"""
@@ -239,7 +236,7 @@ class Monitor(Fighter):
 		"""
 		number1 = self.spawn_number(1, 0.9 * number)
 		number2 = self.spawn_number(1, 0.7 * number)
-		self.printer("%s 发现 %s 思修成绩不及格，发狂了，\n上前狂咬了 %s 一口，\n造成了 %d 点伤害，\n又上前狂咬了 %s 一口，\n造成了 %d 点伤害，\n又上前狂咬了 %s 一口，\n造成了 %d 点伤害，\n自己受到反噬的 %d 点伤害。"%(self.NAME, self.ENEMY, self.ENEMY, self.ENEMY, self.ENEMY, number, number1, number2))
+		self.printer("%s 发现 %s 思修成绩不及格，发狂了，上前狂咬了 %s 一口，造成了 %d 点伤害，又上前狂咬了 %s 一口，造成了 %d 点伤害，又上前狂咬了 %s 一口，造成了 %d 点伤害，自己受到反噬的 %d 点伤害。"%(self.NAME, self.ENEMY, self.ENEMY, self.ENEMY, self.ENEMY, number, number1, number2))
 		case_number = {"HP": number + number1 + number2}	# 构建 dict
 		self.enemy.hurt(case_number)	# 调用敌人的 hurt() 方法以处理敌方数据
 		case_number = {"HP": number1 + number2}
@@ -290,24 +287,23 @@ class Application(tkinter.Tk):
 		super(Application, self).__init__(master)
 		self.title("Name Fight")
 		# self.geometry("%dx%d"%(self.winfo_screenwidth() / 2, self.winfo_screenheight() / 2))
-		# self.resizable(width=True, height=True)
-		self.font = tkinter.font.Font(self, family="Sans", size=13)
+		self.resizable(width=False, height=False)
+		self.font = tkinter.font.Font(self, family="Monospace", size=13)
 		self.rowconfigure(0, weight=1)
 		self.rowconfigure(1, weight=2)
 		self.columnconfigure(0, weight=1)
 		self.columnconfigure(1, weight=2)
 		self.columnconfigure(2, weight=1)
-		# TODO(请叫我喵 Alynx): Find a way to calculate the size of the window automatically via detecting the size of screen.
 		self.create_input()
 		self.create_text()
 		self.parse_args(args)
 
 	def parse_args(self, args):
 		if args.name1 != None:
-			self.name_input1.insert(tkinter.INSERT, args.name1)
+			self.name_input1.insert(tkinter.END, args.name1)
 			self.name_input1.update()
 		if args.name2 != None:
-			self.name_input2.insert(tkinter.INSERT, args.name2)
+			self.name_input2.insert(tkinter.END, args.name2)
 			self.name_input2.update()
 		if (args.name1 != None) and (args.name2 != None):
 			self.callback()
@@ -318,19 +314,19 @@ class Application(tkinter.Tk):
 		self.name_input1 = tkinter.Entry(self.input_frame1, font=self.font)
 		self.name_input1.grid(row=1)
 		self.input_frame1.rowconfigure(0, weight=1)
-		self.input_frame1.columnconfigure (0, weight=1)
-		self.input_frame1.grid(row=0, column=0, pady=10)
-		#self.name_input1.bind(sequence="<Enter>", func=self.callback)
+		self.input_frame1.columnconfigure(0, weight=1)
+		self.input_frame1.grid(row=0, column=0, padx=30, pady=10)
+		# self.name_input1.bind(sequence="<Enter>", func=self.callback)
 		self.save_button = tkinter.Button(self, text="开始对战！", state="normal", command=self.callback, font=self.font)
-		self.save_button.grid(row=0, column=1, pady=10)
+		self.save_button.grid(row=0, column=1, padx=10, pady=10)
 		self.input_frame2 = tkinter.Frame(self)
 		tkinter.Label(self.input_frame2, text="请输入第二个玩家的名字：", font=self.font).grid(row=0)
 		self.name_input2 = tkinter.Entry(self.input_frame2, font=self.font)
 		self.name_input2.grid(row=1)
 		self.input_frame1.rowconfigure(0, weight=1)
-		self.input_frame1.columnconfigure (0, weight=1)
-		self.input_frame2.grid(row=0, column=2, pady=10)
-		#self.name_input2.bind(sequence="<Enter>", func=self.callback)
+		self.input_frame1.columnconfigure(0, weight=1)
+		self.input_frame2.grid(row=0, column=2, padx=30, pady=10)
+		# self.name_input2.bind(sequence="<Enter>", func=self.callback)
 
 	def create_data(self):
 		self.plr1_frame = tkinter.Frame(self)
@@ -342,22 +338,48 @@ class Application(tkinter.Tk):
 			"LUK": tkinter.StringVar(),
 			"ACC": tkinter.StringVar()
 		}
-		tkinter.Label(self.plr1_frame, text=self.plr1_name, font=self.font).grid(row=0)
-		tkinter.Label(self.plr1_frame, text="体力", font=self.font).grid(row=1)
-		tkinter.Label(self.plr1_frame, textvariable=self.plr1_data["HP"], font=self.font).grid(row=2)
-		tkinter.Label(self.plr1_frame, text="攻击", font=self.font).grid(row=3)
-		tkinter.Label(self.plr1_frame, textvariable=self.plr1_data["ATK"], font=self.font).grid(row=4)
-		tkinter.Label(self.plr1_frame, text="防御", font=self.font).grid(row=5)
-		tkinter.Label(self.plr1_frame, textvariable=self.plr1_data["DEF"], font=self.font).grid(row=6)
-		tkinter.Label(self.plr1_frame, text="速度", font=self.font).grid(row=7)
-		tkinter.Label(self.plr1_frame, textvariable=self.plr1_data["SPD"], font=self.font).grid(row=8)
-		tkinter.Label(self.plr1_frame, text="命中", font=self.font).grid(row=9)
-		tkinter.Label(self.plr1_frame, textvariable=self.plr1_data["ACC"], font=self.font).grid(row=10)
-		tkinter.Label(self.plr1_frame, text="运气", font=self.font).grid(row=11)
-		tkinter.Label(self.plr1_frame, textvariable=self.plr1_data["LUK"], font=self.font).grid(row=12)
+		tkinter.Label(self.plr1_frame,\
+					  text=self.plr1_name + "的数据",\
+					  font=self.font).grid(row=0, padx=10, pady=10)
+		tkinter.Label(self.plr1_frame,\
+					  text="体力",\
+					  font=self.font).grid(row=1, padx=10, pady=10)
+		tkinter.Label(self.plr1_frame,\
+					  textvariable=self.plr1_data["HP"],\
+					  font=self.font).grid(row=2, padx=10, pady=10)
+		tkinter.Label(self.plr1_frame,\
+					  text="攻击",\
+					  font=self.font).grid(row=3, padx=10, pady=10)
+		tkinter.Label(self.plr1_frame,\
+					  textvariable=self.plr1_data["ATK"],\
+					  font=self.font).grid(row=4, padx=10, pady=10)
+		tkinter.Label(self.plr1_frame,\
+					  text="防御",\
+					  font=self.font).grid(row=5, padx=10, pady=10)
+		tkinter.Label(self.plr1_frame,\
+					  textvariable=self.plr1_data["DEF"],\
+					  font=self.font).grid(row=6, padx=10, pady=10)
+		tkinter.Label(self.plr1_frame,\
+					  text="速度",\
+					  font=self.font).grid(row=7, padx=10, pady=10)
+		tkinter.Label(self.plr1_frame,\
+					  textvariable=self.plr1_data["SPD"],\
+					  font=self.font).grid(row=8, padx=10, pady=10)
+		tkinter.Label(self.plr1_frame,\
+					  text="命中",\
+					  font=self.font).grid(row=9, padx=10, pady=10)
+		tkinter.Label(self.plr1_frame,\
+					  textvariable=self.plr1_data["ACC"],\
+					  font=self.font).grid(row=10, padx=10, pady=10)
+		tkinter.Label(self.plr1_frame,\
+					  text="运气",\
+					  font=self.font).grid(row=11, padx=10, pady=10)
+		tkinter.Label(self.plr1_frame,\
+					  textvariable=self.plr1_data["LUK"],\
+					  font=self.font).grid(row=12, padx=10, pady=10)
 		# self.plr1_frame.rowconfigure(0, weight=1)
-		self.plr1_frame.columnconfigure (0, weight=1)
-		self.plr1_frame.grid(row=1,column=0, sticky="nsew")
+		self.plr1_frame.columnconfigure(0, weight=1)
+		self.plr1_frame.grid(row=1,column=0)
 		self.plr2_frame = tkinter.Frame(self)
 		self.plr2_data = {
 			"HP": tkinter.StringVar(),
@@ -367,22 +389,48 @@ class Application(tkinter.Tk):
 			"LUK": tkinter.StringVar(),
 			"ACC": tkinter.StringVar()
 		}
-		tkinter.Label(self.plr2_frame, text=self.plr2_name, font=self.font).grid(row=0)
-		tkinter.Label(self.plr2_frame, text="体力", font=self.font).grid(row=1)
-		tkinter.Label(self.plr2_frame, textvariable=self.plr2_data["HP"], font=self.font).grid(row=2)
-		tkinter.Label(self.plr2_frame, text="攻击", font=self.font).grid(row=3)
-		tkinter.Label(self.plr2_frame, textvariable=self.plr2_data["ATK"], font=self.font).grid(row=4)
-		tkinter.Label(self.plr2_frame, text="防御", font=self.font).grid(row=5)
-		tkinter.Label(self.plr2_frame, textvariable=self.plr2_data["DEF"], font=self.font).grid(row=6)
-		tkinter.Label(self.plr2_frame, text="速度", font=self.font).grid(row=7)
-		tkinter.Label(self.plr2_frame, textvariable=self.plr2_data["SPD"], font=self.font).grid(row=8)
-		tkinter.Label(self.plr2_frame, text="命中", font=self.font).grid(row=9)
-		tkinter.Label(self.plr2_frame, textvariable=self.plr2_data["ACC"], font=self.font).grid(row=10)
-		tkinter.Label(self.plr2_frame, text="运气", font=self.font).grid(row=11)
-		tkinter.Label(self.plr2_frame, textvariable=self.plr2_data["LUK"], font=self.font).grid(row=12)
+		tkinter.Label(self.plr2_frame,\
+					  text=self.plr2_name + "的数据",\
+					  font=self.font).grid(row=0, padx=10, pady=10)
+		tkinter.Label(self.plr2_frame,\
+					  text="体力",\
+					  font=self.font).grid(row=1, padx=10, pady=10)
+		tkinter.Label(self.plr2_frame,\
+					  textvariable=self.plr2_data["HP"],\
+					  font=self.font).grid(row=2, padx=10, pady=10)
+		tkinter.Label(self.plr2_frame,\
+					  text="攻击",\
+					  font=self.font).grid(row=3, padx=10, pady=10)
+		tkinter.Label(self.plr2_frame,\
+					  textvariable=self.plr2_data["ATK"],\
+					  font=self.font).grid(row=4, padx=10, pady=10)
+		tkinter.Label(self.plr2_frame,\
+					  text="防御",\
+					  font=self.font).grid(row=5, padx=10, pady=10)
+		tkinter.Label(self.plr2_frame,\
+					  textvariable=self.plr2_data["DEF"],\
+					  font=self.font).grid(row=6, padx=10, pady=10)
+		tkinter.Label(self.plr2_frame,\
+					  text="速度",\
+					  font=self.font).grid(row=7, padx=10, pady=10)
+		tkinter.Label(self.plr2_frame,\
+					  textvariable=self.plr2_data["SPD"],\
+					  font=self.font).grid(row=8, padx=10, pady=10)
+		tkinter.Label(self.plr2_frame,\
+					  text="命中",\
+					  font=self.font).grid(row=9, padx=10, pady=10)
+		tkinter.Label(self.plr2_frame,\
+					  textvariable=self.plr2_data["ACC"],\
+					  font=self.font).grid(row=10, padx=10, pady=10)
+		tkinter.Label(self.plr2_frame,\
+					  text="运气",\
+					  font=self.font).grid(row=11, padx=10, pady=10)
+		tkinter.Label(self.plr2_frame,\
+					  textvariable=self.plr2_data["LUK"],\
+					  font=self.font).grid(row=12, padx=10, pady=10)
 		# self.plr2_frame.rowconfigure(0, weight=1)
-		self.plr2_frame.columnconfigure (0, weight=1)
-		self.plr2_frame.grid(row=1,column=2, sticky="nsew")
+		self.plr2_frame.columnconfigure(0, weight=1)
+		self.plr2_frame.grid(row=1,column=2)
 		self.data_update(self.plr1_data, self.plr1)
 		self.data_update(self.plr2_data, self.plr2)
 
@@ -392,13 +440,13 @@ class Application(tkinter.Tk):
 
 	def create_text(self):
 		self.text_display = tkinter.scrolledtext.ScrolledText(self, font=self.font)
-		self.text_display.bind("<KeyPress>", lambda e : "break")
-		self.text_display.grid(row=1, column=1, sticky="nsew")
+		# self.text_display.bind("<KeyPress>", lambda e : "break")
+		self.text_display.grid(row=1, column=1, ipadx=10, ipady=10)
 
 	def text_print(self, str):
-		self.text_display.insert(tkinter.INSERT, str + '\n')
+		self.text_display.insert(tkinter.END, str + '\n')
 		self.text_display.update()
-		self.text_display.see(tkinter.INSERT)
+		self.text_display.see(tkinter.END)
 
 	def callback(self, event=None):
 		self.plr1_name = self.name_input1.get()
@@ -408,35 +456,22 @@ class Application(tkinter.Tk):
 			return False
 		self.save_button["state"] = "disable"
 		self.text_print(self.plr1_name + ' ' + "VS" + ' ' + self.plr2_name)
-		self.result = self.main(self.text_print)
-		tkinter.messagebox.showinfo("Game Over!", self.result)
-		self.save_button["state"] = "normal"
-		# TODO(请叫我喵 Alynx):
-		# 1. Add a messagebox to show the winner.
-		# 2. Let the button normal after one time of game finished.
+		try:
+			self.main(self.text_print)
+		except:
+			pass
+		finally:
+			self.save_button["state"] = "normal"
+		return 0
 
 	def main(self, printer=print):
-		# TODO(请叫我喵 Alynx): Let this become a private method of Application?
 		"""
 		运行主体。如果不能从参数中获取玩家信息，就请求输入，然后循环进行回合直至有输家产生。
 		"""
-		# if args.name1 == None:
-		# 	plr1_name = input("输入第一个玩家的名字：")
-		# else:
-		# 	plr1_name = args.name1
-		# if args.name2 == None:
-		# 	plr2_name = input("输入第二个玩家的名字：")
-		# else:
-		# 	plr2_name = args.name2
-
 		# # 彩蛋。
 		# if ("日耳曼战神" in plr1_name) or ("日耳曼战神" in plr2_name):
 		# 	printer("做梦吧你，日耳曼战神永远是最强的，想打赢战神？不可能！")
 		# return 1
-
-		# # 颜色化玩家名称，玩家一蓝色，玩家二黄色。
-		# plr1_name = "\033[34;1m" + plr1_name + "\033[0m"
-		# plr2_name = "\033[33;1m" + plr2_name + "\033[0m"
 
 		# 生成 Fighter 对象。
 		self.plr1 = Fighter(self.plr1_name, self.plr2_name, printer)
@@ -460,7 +495,7 @@ class Application(tkinter.Tk):
 		i = 0
 
 		self.create_data()
-		printer("==================================================")
+		printer("================================================================================")
 
 		# 进行战斗循环。
 		while ((self.plr1.numbers["HP"] > 0) and (self.plr2.numbers["HP"] > 0)):
@@ -470,11 +505,11 @@ class Application(tkinter.Tk):
 				self.plr1.check()
 				self.plr2.check()
 				printer("回合 #%d:"%(i))
-				printer("==================================================")
-				# # 输出双方实时数据。
+				printer("================================================================================")
+				# 输出双方实时数据。
 				# self.plr1.print_item()
 				# self.plr2.print_item()
-				# printer("==================================================")
+				# printer("================================================================================")
 				time.sleep(0.5)
 				# 先手发起攻击。
 				self.plr1.fight(hp_limit)
@@ -482,11 +517,11 @@ class Application(tkinter.Tk):
 				# 判断是否致命。
 				if not ((self.plr1.numbers["HP"] > 0) and (self.plr2.numbers["HP"] > 0)):
 					time.sleep(0.5)
-					printer("==================================================")
+					printer("================================================================================")
 					time.sleep(0.5)
 					break
 				time.sleep(0.5)
-				printer("--------------------------------------------------")
+				printer("--------------------------------------------------------------------------------")
 				time.sleep(0.5)
 				# 后手发起攻击。
 				self.plr2.fight(hp_limit)
@@ -496,29 +531,29 @@ class Application(tkinter.Tk):
 				self.plr2.check()
 				self.plr1.check()
 				printer("回合 #%d:"%(i))
-				printer("==================================================")
+				printer("================================================================================")
 				# self.plr2.print_item()
 				# self.plr1.print_item()
-				# printer("==================================================")
+				# printer("================================================================================")
 				time.sleep(0.5)
 				self.plr2.fight(hp_limit)
 				self.data_update(self.plr1_data, self.plr1)
 				if not ((self.plr1.numbers["HP"] > 0) and (self.plr2.numbers["HP"] > 0)):
 					time.sleep(0.5)
-					printer("==================================================")
+					printer("================================================================================")
 					time.sleep(0.5)
 					break
 				time.sleep(0.5)
-				printer("--------------------------------------------------")
+				printer("--------------------------------------------------------------------------------")
 				time.sleep(0.5)
 				self.plr1.fight(hp_limit)
 				self.data_update(self.plr2_data, self.plr2)
 
 			time.sleep(0.5)
-			printer("==================================================")
+			printer("================================================================================")
 			time.sleep(0.5)
 
-		#printer("==================================================")
+		#printer("================================================================================")
 
 		# 判断结果。
 		if self.plr1.numbers["HP"] <= 0 and self.plr2.numbers["HP"] <= 0:
@@ -537,10 +572,10 @@ class Application(tkinter.Tk):
 				# self.plr1.print_item()
 				self.data_update(self.plr2_data, self.plr2)
 				self.data_update(self.plr1_data, self.plr1)
-				# printer("==================================================")
+				# printer("================================================================================")
 				time.sleep(0.5)
-				# printer("经历 %d 个回合，%s 和 %s 棋逢对手，两败俱伤。"%(i, self.plr1_name, self.plr2_name))	# 平局。
-				return "经历 %d 个回合，%s 和 %s 棋逢对手，两败俱伤。"%(i, self.plr1_name, self.plr2_name)	# 平局。
+			# printer("经历 %d 个回合，%s 和 %s 棋逢对手，两败俱伤。"%(i, self.plr1_name, self.plr2_name))	# 平局。
+			tkinter.messagebox.showinfo("Game Over!", "经历 %d 个回合，%s 和 %s 棋逢对手，两败俱伤。"%(i, self.plr1_name, self.plr2_name))	# 平局。
 		elif self.plr1.numbers["HP"] <= 0 and self.plr2.numbers["HP"] > 0:
 			if self.plr1.numbers["SPD"] >= self.plr2.numbers["SPD"]:
 				self.plr1.check()
@@ -556,10 +591,10 @@ class Application(tkinter.Tk):
 				# self.plr1.print_item()
 				self.data_update(self.plr2_data, self.plr2)
 				self.data_update(self.plr1_data, self.plr1)
-				# printer("==================================================")
+				# printer("================================================================================")
 				time.sleep(0.5)
-				# printer("经历 %d 个回合，%s 输了，获胜者是 %s。"%(i, self.plr1_name, self.plr2_name))	# 一号玩家失败。
-				return "经历 %d 个回合，%s 输了，获胜者是 %s。"%(i, self.plr1_name, self.plr2_name)	# 一号玩家失败。
+			# printer("经历 %d 个回合，%s 输了，获胜者是 %s。"%(i, self.plr1_name, self.plr2_name))	# 一号玩家失败。
+			tkinter.messagebox.showinfo("Game Over!", "经历 %d 个回合，%s 输了，获胜者是 %s。"%(i, self.plr1_name, self.plr2_name))	# 一号玩家失败。
 		elif self.plr1.numbers["HP"] > 0 and self.plr2.numbers["HP"] <= 0:
 			if self.plr1.numbers["SPD"] >= self.plr2.numbers["SPD"]:
 				self.plr1.check()
@@ -575,10 +610,11 @@ class Application(tkinter.Tk):
 				# self.plr1.print_item()
 				self.data_update(self.plr2_data, self.plr2)
 				self.data_update(self.plr1_data, self.plr1)
-				# printer("==================================================")
+				# printer("================================================================================")
 				time.sleep(0.5)
-				# printer("经历 %d 个回合，%s 输了，获胜者是 %s。"%(i, self.plr2_name, self.plr1_name))	# 二号玩家失败。
-				return "经历 %d 个回合，%s 输了，获胜者是 %s。"%(i, self.plr2_name, self.plr1_name)	# 二号玩家失败。
+			# printer("经历 %d 个回合，%s 输了，获胜者是 %s。"%(i, self.plr2_name, self.plr1_name))	# 二号玩家失败。
+			tkinter.messagebox.showinfo("Game Over!", "经历 %d 个回合，%s 输了，获胜者是 %s。"%(i, self.plr2_name, self.plr1_name))	# 二号玩家失败。
+		return 0
 
 root = Application()
 root.mainloop()
