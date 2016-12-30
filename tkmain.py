@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 #-*- coding: utf-8 -*-
 
-### Filename: main.py
+### Filename: tkmain.py
 ## Created by 请叫我喵 Alynx
 # sxshax@gmail.com, http://alynx.xyz/
 
 
 
-import sys
 import time
 import random
 import hashlib
