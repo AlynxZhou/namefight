@@ -445,8 +445,8 @@ class Application(Tk):
 			  text="请输入第二个玩家的名字：",\
 			  font=self.font).grid(row=0)
 		self.name_input2 = Entry(self.input_frame2,\
-								 font=self.font,\
-								 fg="DarkSlateBlue")
+					 font=self.font,\
+					 fg="DarkSlateBlue")
 		self.name_input2.grid(row=1)
 		self.input_frame1.rowconfigure(0, weight=1)
 		self.input_frame1.columnconfigure(0, weight=1)
