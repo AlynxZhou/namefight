@@ -458,6 +458,15 @@ class Application(Tk):
 		"""
 		建立用于展示玩家数据的区域，用Label实时刷新。
 		"""
+		# 如果已经存在 Frame，就清除它们，防止覆盖不全留下痕迹。
+		try:
+			self.plr1_frame.destroy()
+		except:
+			pass
+		try:
+			self.plr2_frame.destroy()
+		except:
+			pass
 		# 建立玩家1的 Frame。
 		self.plr1_frame = Frame(self)
 		# 建立用户1的 Label 集合用来展示数据，便于实时刷新。
