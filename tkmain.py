@@ -163,15 +163,15 @@ class Fighter(object):
 		# 构建含有多项数值的 dict
 		case_number = {
 			"ATK": self.spawn_number(number / 4,\
-									 self.enemy.numbers["ATK"] * 0.7),
+						 self.enemy.numbers["ATK"] * 0.7),
 			"DEF": self.spawn_number(number / 4,\
-									 self.enemy.numbers["DEF"] * 0.7),
+						 self.enemy.numbers["DEF"] * 0.7),
 			"SPD": self.spawn_number(number / 4,\
-									 self.enemy.numbers["SPD"] * 0.7),
+						 self.enemy.numbers["SPD"] * 0.7),
 			"LUK": self.spawn_number(number / 4,\
-									 self.enemy.numbers["LUK"] * 0.7),
+						 self.enemy.numbers["LUK"] * 0.7),
 			"ACC": self.spawn_number(number / 4,\
-									 self.enemy.numbers["ACC"] * 0.7)
+						 self.enemy.numbers["ACC"] * 0.7)
 		}
 		self.enemy.hurt(case_number)
 
@@ -247,8 +247,8 @@ class Fighter(object):
 
 		# 通过双方的命中率生成的随机值判断发起攻击成功还是失败。
 		if self.numbers["ACC"] > int((
-					self.numbers["ACC"] + self.enemy.numbers["ACC"]
-				) * random.random()):
+				self.numbers["ACC"] + self.enemy.numbers["ACC"]
+		) * random.random()):
 			# 可以发起攻击时随机选择攻击方式。
 			case = random.choice([
 				"bite",
@@ -264,7 +264,7 @@ class Fighter(object):
 			# 判断运气值决定是否自己承受伤害。
 			if self.numbers["LUK"] > int((
 					self.numbers["LUK"] + self.enemy.numbers["LUK"]
-					) * random.random()):
+			) * random.random()):
 				case = "miss"
 			else:
 				case = "fall"
@@ -320,8 +320,8 @@ class Monitor(Fighter):
 		)
 
 		if self.numbers["ACC"] > int((
-					self.numbers["ACC"] + self.enemy.numbers["ACC"]
-				) * random.random()):
+				self.numbers["ACC"] + self.enemy.numbers["ACC"]
+		) * random.random()):
 			case = random.choice([
 				"sbite",
 				"sbite",
@@ -339,7 +339,9 @@ class Monitor(Fighter):
 			])
 		else:
 			number = int(number * random.random())
-			if self.numbers["LUK"] > int((self.numbers["LUK"] + self.enemy.numbers["LUK"]) * random.random()):
+			if self.numbers["LUK"] > int((
+					self.numbers["LUK"] + self.enemy.numbers["LUK"]
+			) * random.random()):
 				case = "miss"
 			else:
 				case = "fall"
@@ -413,12 +415,12 @@ class Application(Tk):
 		self.input_frame1 = Frame(self)
 		# 提示语，隶属于第一个 Frame，展示在这个 Frame 的第一行。
 		Label(self.input_frame1,\
-			  text="请输入第一个玩家的名字：",\
-			  font=self.font).grid(row=0)
+		      text="请输入第一个玩家的名字：",\
+		      font=self.font).grid(row=0)
 		# 建立隶属于第一个 Frame 的文本框对象，用于后续获取文本。
 		self.name_input1 = Entry(self.input_frame1,\
-								 font=self.font,\
-								 fg="DarkSlateBlue")
+					 font=self.font,\
+					 fg="DarkSlateBlue")
 		# 在 Frame 的第二行展示。
 		self.name_input1.grid(row=1)
 		self.input_frame1.rowconfigure(0, weight=1)
@@ -429,12 +431,12 @@ class Application(Tk):
 
 		# 建立确定按钮，点击后执行 callback() 方法开启对战。
 		self.save_button = Button(self, text="Fight!",\
-								  state="normal",\
-								  command=self.callback,\
-								  font=self.font,\
-								  fg="red",\
-								  activeforeground="white",\
-								  activebackground="red")
+					  state="normal",\
+					  command=self.callback,\
+					  font=self.font,\
+					  fg="red",\
+					  activeforeground="white",\
+					  activebackground="red")
 		self.save_button.grid(row=0, column=2, padx=10, pady=10)
 
 		# 建立第二个 Frame。
@@ -461,127 +463,127 @@ class Application(Tk):
 		# 建立用户1的 Label 集合用来展示数据，便于实时刷新。
 		self.plr1_labels = {
 			"HP": Label(self.plr1_frame,\
-						text=str(self.plr1.numbers["HP"]),\
-						font=self.font,\
-						fg="CornflowerBlue"),
+				    text=str(self.plr1.numbers["HP"]),\
+				    font=self.font,\
+				    fg="CornflowerBlue"),
 			"ATK": Label(self.plr1_frame,\
-						 text=str(self.plr1.numbers["ATK"]),\
-						 font=self.font,\
-						fg="CornflowerBlue"),
+				     text=str(self.plr1.numbers["ATK"]),\
+				     font=self.font,\
+				     fg="CornflowerBlue"),
 			"DEF": Label(self.plr1_frame,\
-						 text=str(self.plr1.numbers["DEF"]),\
-						 font=self.font,\
-						fg="CornflowerBlue"),
+				     text=str(self.plr1.numbers["DEF"]),\
+				     font=self.font,\
+				     fg="CornflowerBlue"),
 			"SPD": Label(self.plr1_frame,\
-						 text=str(self.plr1.numbers["SPD"]),\
-						 font=self.font,\
-						fg="CornflowerBlue"),
+				     text=str(self.plr1.numbers["SPD"]),\
+				     font=self.font,\
+				     fg="CornflowerBlue"),
 			"ACC": Label(self.plr1_frame,\
-						 text=str(self.plr1.numbers["ACC"]),\
-						 font=self.font,\
-						fg="CornflowerBlue"),
+				     text=str(self.plr1.numbers["ACC"]),\
+				     font=self.font,\
+				     fg="CornflowerBlue"),
 			"LUK": Label(self.plr1_frame,\
-						 text=str(self.plr1.numbers["LUK"]),\
-						 font=self.font,\
-						fg="CornflowerBlue")
+				     text=str(self.plr1.numbers["LUK"]),\
+				     font=self.font,\
+				     fg="CornflowerBlue")
 		}
 		# 显示固定不变的 Label.
 		Label(self.plr1_frame,\
-					  text=self.plr1_name + " 的数据",\
-					  font=self.font).grid(row=0,\
-										   column=0,\
-										   columnspan=2,\
-										   padx=30,\
-										   pady=20)
+		      text=self.plr1_name + " 的数据",\
+		      font=self.font).grid(row=0,\
+					   column=0,\
+					   columnspan=2,\
+					   padx=30,\
+					   pady=20)
 		Label(self.plr1_frame,\
-					  text="体力",\
-					  font=self.font).grid(row=1, column=0, padx=30, pady=20)
+		      text="体力",\
+		      font=self.font).grid(row=1, column=0, padx=30, pady=20)
 		self.plr1_labels["HP"].grid(row=2, column=0, padx=30, pady=20)
 		Label(self.plr1_frame,\
-					  text="攻击",\
-					  font=self.font).grid(row=3, column=0, padx=30, pady=20)
+		      text="攻击",\
+		      font=self.font).grid(row=3, column=0, padx=30, pady=20)
 		self.plr1_labels["ATK"].grid(row=4, column=0, padx=30, pady=20)
 		Label(self.plr1_frame,\
-					  text="防御",\
-					  font=self.font).grid(row=5, column=0, padx=30, pady=20)
+		      text="防御",\
+		      font=self.font).grid(row=5, column=0, padx=30, pady=20)
 		self.plr1_labels["DEF"].grid(row=6, column=0, padx=30, pady=20)
 		Label(self.plr1_frame,\
-					  text="速度",\
-					  font=self.font).grid(row=1, column=1, padx=30, pady=20)
+		      text="速度",\
+		      font=self.font).grid(row=1, column=1, padx=30, pady=20)
 		self.plr1_labels["SPD"].grid(row=2, column=1, padx=30, pady=20)
 		Label(self.plr1_frame,\
-					  text="命中",\
-					  font=self.font).grid(row=3, column=1, padx=30, pady=20)
+		      text="命中",\
+		      font=self.font).grid(row=3, column=1, padx=30, pady=20)
 		self.plr1_labels["ACC"].grid(row=4, column=1, padx=30, pady=20)
 		Label(self.plr1_frame,\
-					  text="运气",\
-					  font=self.font).grid(row=5, column=1, padx=30, pady=20)
+		      text="运气",\
+		      font=self.font).grid(row=5, column=1, padx=30, pady=20)
 		self.plr1_labels["LUK"].grid(row=6, column=1, padx=30, pady=20)
 		# self.plr1_frame.rowconfigure(0, weight=1)
 		self.plr1_frame.columnconfigure(0, weight=1)
 		self.plr1_frame.columnconfigure(1, weight=1)
-		self.plr1_frame.grid(row=1,column=0)
+		self.plr1_frame.grid(row=1, column=0)
 
 		# 建立玩家2的 Frame。
 		self.plr2_frame = Frame(self)
 		# 建立玩家2的 Label 集合用来展示数据，便于实时刷新。
 		self.plr2_labels = {
 			"HP": Label(self.plr2_frame,\
-						text=str(self.plr2.numbers["HP"]),\
-						font=self.font,\
-						fg="CornflowerBlue"),
+				    text=str(self.plr2.numbers["HP"]),\
+				    font=self.font,\
+				    fg="CornflowerBlue"),
 			"ATK": Label(self.plr2_frame,\
-						 text=str(self.plr2.numbers["ATK"]),\
-						 font=self.font,\
-						fg="CornflowerBlue"),
+				     text=str(self.plr2.numbers["ATK"]),\
+				     font=self.font,\
+				     fg="CornflowerBlue"),
 			"DEF": Label(self.plr2_frame,\
-						 text=str(self.plr2.numbers["DEF"]),\
-						 font=self.font,\
-						fg="CornflowerBlue"),
+				     text=str(self.plr2.numbers["DEF"]),\
+				     font=self.font,\
+				     fg="CornflowerBlue"),
 			"SPD": Label(self.plr2_frame,\
-						 text=str(self.plr2.numbers["SPD"]),\
-						 font=self.font,\
-						fg="CornflowerBlue"),
+				     text=str(self.plr2.numbers["SPD"]),\
+				     font=self.font,\
+				     fg="CornflowerBlue"),
 			"ACC": Label(self.plr2_frame,\
-						 text=str(self.plr2.numbers["ACC"]),\
-						 font=self.font,\
-						fg="CornflowerBlue"),
+				     text=str(self.plr2.numbers["ACC"]),\
+				     font=self.font,\
+				     fg="CornflowerBlue"),
 			"LUK": Label(self.plr2_frame,\
-						 text=str(self.plr2.numbers["LUK"]),\
-						 font=self.font,\
-						fg="CornflowerBlue")
+				     text=str(self.plr2.numbers["LUK"]),\
+				     font=self.font,\
+				     fg="CornflowerBlue")
 		}
 		# 显示固定不变的 Label.
 		Label(self.plr2_frame,\
-					  text=self.plr2_name + " 的数据",\
-					  font=self.font).grid(row=0,\
-										   column=0,\
-										   columnspan=2,\
-										   padx=30,\
-										   pady=20)
+		      text=self.plr2_name + " 的数据",\
+		      font=self.font).grid(row=0,\
+					   column=0,\
+					   columnspan=2,\
+					   padx=30,\
+					   pady=20)
 		Label(self.plr2_frame,\
-					  text="体力",\
-					  font=self.font).grid(row=1, column=0, padx=30, pady=20)
+		      text="体力",\
+		      font=self.font).grid(row=1, column=0, padx=30, pady=20)
 		self.plr2_labels["HP"].grid(row=2, column=0, padx=30, pady=20)
 		Label(self.plr2_frame,\
-					  text="攻击",\
-					  font=self.font).grid(row=3, column=0, padx=30, pady=20)
+		      text="攻击",\
+		      font=self.font).grid(row=3, column=0, padx=30, pady=20)
 		self.plr2_labels["ATK"].grid(row=4, column=0, padx=30, pady=20)
 		Label(self.plr2_frame,\
-					  text="防御",\
-					  font=self.font).grid(row=5, column=0, padx=30, pady=20)
+		      text="防御",\
+		      font=self.font).grid(row=5, column=0, padx=30, pady=20)
 		self.plr2_labels["DEF"].grid(row=6, column=0, padx=30, pady=20)
 		Label(self.plr2_frame,\
-					  text="速度",\
-					  font=self.font).grid(row=1, column=1, padx=30, pady=20)
+		      text="速度",\
+		      font=self.font).grid(row=1, column=1, padx=30, pady=20)
 		self.plr2_labels["SPD"].grid(row=2, column=1, padx=30, pady=20)
 		Label(self.plr2_frame,\
-					  text="命中",\
-					  font=self.font).grid(row=3, column=1, padx=30, pady=20)
+		      text="命中",\
+		      font=self.font).grid(row=3, column=1, padx=30, pady=20)
 		self.plr2_labels["ACC"].grid(row=4, column=1, padx=30, pady=20)
 		Label(self.plr2_frame,\
-					  text="运气",\
-					  font=self.font).grid(row=5, column=1, padx=30, pady=20)
+		      text="运气",\
+		      font=self.font).grid(row=5, column=1, padx=30, pady=20)
 		self.plr2_labels["LUK"].grid(row=6, column=1, padx=30, pady=20)
 		# self.plr2_frame.rowconfigure(0, weight=1)
 		self.plr2_frame.columnconfigure(0, weight=1)
@@ -598,7 +600,7 @@ class Application(Tk):
 				labels[x].configure(text=str(fighter.numbers[x]), fg="red")
 			else:
 				labels[x].configure(text=str(fighter.numbers[x]),\
-									fg="CornflowerBlue")
+						    fg="CornflowerBlue")
 
 
 
@@ -607,8 +609,8 @@ class Application(Tk):
 		建立文本显示区显示对战过程。
 		"""
 		self.text_display = ScrolledText(self,\
-										 font=self.font,\
-										 fg="DarkSlateGray")
+						 font=self.font,\
+						 fg="DarkSlateGray")
 		# self.text_display.bind("<KeyPress>", lambda e : "break")
 		self.text_display.grid(row=1, column=1, columnspan=3, padx=10, pady=10)
 
@@ -669,16 +671,28 @@ class Application(Tk):
 		# HP 补偿。
 		while abs(self.plr1.numbers["HP"] - self.plr2.numbers["HP"]) > 233:
 			if self.plr1.numbers["HP"] < self.plr2.numbers["HP"]:
-				self.plr1.numbers["HP"] += int(abs(self.plr1.numbers["HP"] - self.plr2.numbers["HP"]) * random.random())
+				self.plr1.numbers["HP"] += int(
+					abs(
+						self.plr1.numbers["HP"] - self.plr2.numbers["HP"]
+					) * random.random()
+				)
 			elif self.plr2.numbers["HP"] < self.plr1.numbers["HP"]:
-				self.plr2.numbers["HP"] += int(abs(self.plr1.numbers["HP"] - self.plr2.numbers["HP"]) * random.random())
+				self.plr2.numbers["HP"] += int(
+					abs(
+						self.plr1.numbers["HP"] - self.plr2.numbers["HP"]
+					) * random.random()
+				)
 
 		# 双方的数值检查，最大值 9999。
 		self.plr1.check()
 		self.plr2.check()
 
 		# 计算双方 HP 总和的 1 / 2 作为计算上限保证不会一击致命。
-		hp_limit = int(abs(self.plr1.numbers["HP"] + self.plr2.numbers["HP"]) / 2 * 0.5)
+		hp_limit = int(
+			abs(
+				self.plr1.numbers["HP"] + self.plr2.numbers["HP"]
+			) / 2 * 0.5
+		)
 		# 回合计数器。
 		i = 0
 
@@ -703,7 +717,9 @@ class Application(Tk):
 				self.data_update(self.plr1_labels, self.plr1)
 				self.data_update(self.plr2_labels, self.plr2)
 				# 判断是否致命。
-				if not ((self.plr1.numbers["HP"] > 0) and (self.plr2.numbers["HP"] > 0)):
+				if not ((self.plr1.numbers["HP"] > 0)\
+					and\
+					(self.plr2.numbers["HP"] > 0)):
 					time.sleep(delay)
 					printer("===========================")
 					time.sleep(delay)
@@ -725,7 +741,9 @@ class Application(Tk):
 				self.plr2.fight(hp_limit)
 				self.data_update(self.plr1_labels, self.plr1)
 				self.data_update(self.plr2_labels, self.plr2)
-				if not ((self.plr1.numbers["HP"] > 0) and (self.plr2.numbers["HP"] > 0)):
+				if not ((self.plr1.numbers["HP"] > 0)\
+					and\
+					(self.plr2.numbers["HP"] > 0)):
 					time.sleep(delay)
 					printer("===========================")
 					time.sleep(delay)
@@ -756,7 +774,8 @@ class Application(Tk):
 				self.data_update(self.plr1_labels, self.plr1)
 				time.sleep(delay)
 				# 弹框显示平局。
-			showinfo("Game Over!", "经历 %d 个回合，%s 和 %s 棋逢对手，两败俱伤。"%(i, self.plr1_name, self.plr2_name))
+			showinfo("Game Over!",\
+				 "经历 %d 个回合，%s 和 %s 棋逢对手，两败俱伤。"%(i, self.plr1_name, self.plr2_name))
 		elif self.plr1.numbers["HP"] <= 0 and self.plr2.numbers["HP"] > 0:
 			if self.plr1.numbers["SPD"] >= self.plr2.numbers["SPD"]:
 				self.plr1.check()
@@ -770,7 +789,8 @@ class Application(Tk):
 				self.data_update(self.plr1_labels, self.plr1)
 				time.sleep(delay)
 			# 一号玩家失败。
-			showinfo("Game Over!", "经历 %d 个回合，%s 输了，获胜者是 %s。"%(i, self.plr1_name, self.plr2_name))
+			showinfo("Game Over!",\
+				 "经历 %d 个回合，%s 输了，获胜者是 %s。"%(i, self.plr1_name, self.plr2_name))
 		elif self.plr1.numbers["HP"] > 0 and self.plr2.numbers["HP"] <= 0:
 			if self.plr1.numbers["SPD"] >= self.plr2.numbers["SPD"]:
 				self.plr1.check()
@@ -784,7 +804,8 @@ class Application(Tk):
 				self.data_update(self.plr1_labels, self.plr1)
 				time.sleep(delay)
 			# 二号玩家失败。
-			showinfo("Game Over!", "经历 %d 个回合，%s 输了，获胜者是 %s。"%(i, self.plr2_name, self.plr1_name))
+			showinfo("Game Over!",\
+				 "经历 %d 个回合，%s 输了，获胜者是 %s。"%(i, self.plr2_name, self.plr1_name))
 		return 0
 
 # 运行。
