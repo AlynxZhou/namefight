@@ -27,7 +27,7 @@ args = aparser.parse_args()
 
 
 
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 __author__ = "请叫我喵 Alynx"
 
 
@@ -369,17 +369,20 @@ class Application(Tk):
 		super(Application, self).__init__(master)
 		self.title("Name Fight Ver %s by %s"%(__version__, __author__))
 		# 设置窗口的大小。
-		# self.geometry("%dx%d"%(self.winfo_screenwidth() / 2, self.winfo_screenheight() / 2))
+		t = self.winfo_screenwidth() // 800
+		self.geometry("%dx%d"%(400 * t, 250 * t))
 		# 设置窗口尺寸是否可调。
 		self.resizable(width=False, height=False)
 		# 自定义一个字体对象。
-		self.font = Font(self, family="Monospace", size=13, weight=BOLD)
-		# .grid() 布局方式对行或列占据比例的设置，weight 的总值为分母，单个 weight 的值为分子。
-		self.rowconfigure(0, weight=1)
+		self.font = Font(self, family="Monospace", size=4 * t, weight=BOLD)
+		# .grid() 布局方式对行或列占据比例的设置，weight 的总值为分母，单个 weight 的值为分子, minsize 为最小宽度。
+		self.rowconfigure(0, weight=1, minsize=50 * t)
 		self.rowconfigure(1, weight=2)
-		self.columnconfigure(0, weight=1)
-		self.columnconfigure(1, weight=2)
+		self.columnconfigure(0, weight=1, minsize=100 * t)
+		self.columnconfigure(1, weight=1)
 		self.columnconfigure(2, weight=1)
+		self.columnconfigure(3, weight=1)
+		self.columnconfigure(4, weight=1, minsize=100 * t)
 		# 建立自己定义的对象并解析参数。
 		self.create_input()
 		self.create_text()
@@ -419,8 +422,8 @@ class Application(Tk):
 		# 在 Frame 的第二行展示。
 		self.name_input1.grid(row=1)
 		self.input_frame1.rowconfigure(0, weight=1)
-		# 在第一行第一列展示第一个 Frame，行间距30，列间距10。
-		self.input_frame1.grid(row=0, column=0, padx=30, pady=10)
+		# 在第一行第一列展示第一个 Frame。
+		self.input_frame1.grid(row=0, column=0, columnspan=2, padx=30, pady=10)
 		# 绑定回车作为执行键（有问题）。
 		# self.name_input1.bind(sequence="<Enter>", func=self.callback)
 
@@ -432,7 +435,7 @@ class Application(Tk):
 								  fg="red",\
 								  activeforeground="white",\
 								  activebackground="red")
-		self.save_button.grid(row=0, column=1, padx=10, pady=10)
+		self.save_button.grid(row=0, column=2, padx=10, pady=10)
 
 		# 建立第二个 Frame。
 		self.input_frame2 = Frame(self)
@@ -445,7 +448,7 @@ class Application(Tk):
 		self.name_input2.grid(row=1)
 		self.input_frame1.rowconfigure(0, weight=1)
 		self.input_frame1.columnconfigure(0, weight=1)
-		self.input_frame2.grid(row=0, column=2, padx=30, pady=10)
+		self.input_frame2.grid(row=0, column=3, columnspan=2, padx=30, pady=10)
 		# self.name_input2.bind(sequence="<Enter>", func=self.callback)
 
 
@@ -583,7 +586,7 @@ class Application(Tk):
 		# self.plr2_frame.rowconfigure(0, weight=1)
 		self.plr2_frame.columnconfigure(0, weight=1)
 		self.plr2_frame.columnconfigure(1, weight=1)
-		self.plr2_frame.grid(row=1,column=2)
+		self.plr2_frame.grid(row=1,column=4)
 
 
 	def data_update(self, labels, fighter):
@@ -607,7 +610,7 @@ class Application(Tk):
 										 font=self.font,\
 										 fg="DarkSlateGray")
 		# self.text_display.bind("<KeyPress>", lambda e : "break")
-		self.text_display.grid(row=1, column=1, ipadx=10, ipady=10)
+		self.text_display.grid(row=1, column=1, columnspan=3, padx=10, pady=10)
 
 
 	def text_print(self, str):
@@ -682,7 +685,7 @@ class Application(Tk):
 		# 建立玩家数据展示区域。
 		self.create_data()
 
-		printer("================================================================================")
+		printer("===========================")
 
 		# 进行战斗循环。
 		while ((self.plr1.numbers["HP"] > 0) and (self.plr2.numbers["HP"] > 0)):
@@ -692,7 +695,7 @@ class Application(Tk):
 				self.plr1.check()
 				self.plr2.check()
 				printer("回合 #%d:"%(i))
-				printer("================================================================================")
+				printer("===========================")
 				time.sleep(delay)
 				# 先手发起攻击。
 				self.plr1.fight(hp_limit)
@@ -702,11 +705,11 @@ class Application(Tk):
 				# 判断是否致命。
 				if not ((self.plr1.numbers["HP"] > 0) and (self.plr2.numbers["HP"] > 0)):
 					time.sleep(delay)
-					printer("================================================================================")
+					printer("===========================")
 					time.sleep(delay)
 					break
 				time.sleep(delay)
-				printer("--------------------------------------------------------------------------------")
+				printer("---------------------------")
 				time.sleep(delay)
 				# 后手发起攻击。
 				self.plr2.fight(hp_limit)
@@ -717,25 +720,25 @@ class Application(Tk):
 				self.plr2.check()
 				self.plr1.check()
 				printer("回合 #%d:"%(i))
-				printer("================================================================================")
+				printer("===========================")
 				time.sleep(delay)
 				self.plr2.fight(hp_limit)
 				self.data_update(self.plr1_labels, self.plr1)
 				self.data_update(self.plr2_labels, self.plr2)
 				if not ((self.plr1.numbers["HP"] > 0) and (self.plr2.numbers["HP"] > 0)):
 					time.sleep(delay)
-					printer("================================================================================")
+					printer("===========================")
 					time.sleep(delay)
 					break
 				time.sleep(delay)
-				printer("--------------------------------------------------------------------------------")
+				printer("---------------------------")
 				time.sleep(delay)
 				self.plr1.fight(hp_limit)
 				self.data_update(self.plr2_labels, self.plr2)
 				self.data_update(self.plr1_labels, self.plr1)
 
 			time.sleep(delay)
-			printer("================================================================================")
+			printer("===========================")
 			time.sleep(delay)
 
 		# 判断结果。
@@ -786,10 +789,6 @@ class Application(Tk):
 
 # 运行。
 if __name__ == "__main__":
-	try:
-		root = Application()
-		# 启动程序主循环
-		root.mainloop()
-	except:
-		print('')
-		exit()
+	root = Application()
+	# 启动程序主循环
+	root.mainloop()
