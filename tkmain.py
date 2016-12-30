@@ -639,8 +639,8 @@ class Application(Tk):
 		try:
 			# 进行主要的对战流程，设置输出器。
 			self.main(self.text_print)
-		except:
-			pass
+		# except:
+			# pass
 		finally:
 			# 对战结束后将按钮设置为可用。
 			self.save_button["state"] = "normal"
