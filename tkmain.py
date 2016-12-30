@@ -14,7 +14,7 @@ import hashlib
 import argparse
 
 from tkinter import *
-from tkinter.font import Font
+from tkinter.font import Font, BOLD
 from tkinter.messagebox import showinfo
 from tkinter.scrolledtext import ScrolledText
 
@@ -28,7 +28,7 @@ args = aparser.parse_args()
 
 
 
-__version__ = "0.1.1Beta"
+__version__ = "0.2.0"
 __author__ = "请叫我喵 Alynx"
 
 
@@ -374,7 +374,7 @@ class Application(Tk):
 		# 设置窗口尺寸是否可调。
 		self.resizable(width=False, height=False)
 		# 自定义一个字体对象。
-		self.font = Font(self, family="Monospace", size=13)
+		self.font = Font(self, family="Monospace", size=13, weight=BOLD)
 		# .grid() 布局方式对行或列占据比例的设置，weight 的总值为分母，单个 weight 的值为分子。
 		self.rowconfigure(0, weight=1)
 		self.rowconfigure(1, weight=2)
@@ -414,7 +414,9 @@ class Application(Tk):
 			  text="请输入第一个玩家的名字：",\
 			  font=self.font).grid(row=0)
 		# 建立隶属于第一个 Frame 的文本框对象，用于后续获取文本。
-		self.name_input1 = Entry(self.input_frame1, font=self.font)
+		self.name_input1 = Entry(self.input_frame1,\
+								 font=self.font,\
+								 fg="DarkSlateBlue")
 		# 在 Frame 的第二行展示。
 		self.name_input1.grid(row=1)
 		self.input_frame1.rowconfigure(0, weight=1)
@@ -424,12 +426,23 @@ class Application(Tk):
 		# self.name_input1.bind(sequence="<Enter>", func=self.callback)
 
 		# 建立确定按钮，点击后执行 callback() 方法开启对战。
-		self.save_button = Button(self, text="开始对战！", state="normal", command=self.callback, font=self.font)
+		self.save_button = Button(self, text="Fight!",\
+								  state="normal",\
+								  command=self.callback,\
+								  font=self.font,\
+								  fg="red",\
+								  activeforeground="white",\
+								  activebackground="red")
 		self.save_button.grid(row=0, column=1, padx=10, pady=10)
+
 		# 建立第二个 Frame。
 		self.input_frame2 = Frame(self)
-		Label(self.input_frame2, text="请输入第二个玩家的名字：", font=self.font).grid(row=0)
-		self.name_input2 = Entry(self.input_frame2, font=self.font)
+		Label(self.input_frame2,\
+			  text="请输入第二个玩家的名字：",\
+			  font=self.font).grid(row=0)
+		self.name_input2 = Entry(self.input_frame2,\
+								 font=self.font,\
+								 fg="DarkSlateBlue")
 		self.name_input2.grid(row=1)
 		self.input_frame1.rowconfigure(0, weight=1)
 		self.input_frame1.columnconfigure(0, weight=1)
@@ -447,22 +460,28 @@ class Application(Tk):
 		self.plr1_labels = {
 			"HP": Label(self.plr1_frame,\
 						text=str(self.plr1.numbers["HP"]),\
-						font=self.font),
+						font=self.font,\
+						fg="CornflowerBlue"),
 			"ATK": Label(self.plr1_frame,\
 						 text=str(self.plr1.numbers["ATK"]),\
-						 font=self.font),
+						 font=self.font,\
+						fg="CornflowerBlue"),
 			"DEF": Label(self.plr1_frame,\
 						 text=str(self.plr1.numbers["DEF"]),\
-						 font=self.font),
+						 font=self.font,\
+						fg="CornflowerBlue"),
 			"SPD": Label(self.plr1_frame,\
 						 text=str(self.plr1.numbers["SPD"]),\
-						 font=self.font),
+						 font=self.font,\
+						fg="CornflowerBlue"),
 			"ACC": Label(self.plr1_frame,\
 						 text=str(self.plr1.numbers["ACC"]),\
-						 font=self.font),
+						 font=self.font,\
+						fg="CornflowerBlue"),
 			"LUK": Label(self.plr1_frame,\
 						 text=str(self.plr1.numbers["LUK"]),\
-						 font=self.font)
+						 font=self.font,\
+						fg="CornflowerBlue")
 		}
 		# 显示固定不变的 Label.
 		Label(self.plr1_frame,\
@@ -507,22 +526,28 @@ class Application(Tk):
 		self.plr2_labels = {
 			"HP": Label(self.plr2_frame,\
 						text=str(self.plr2.numbers["HP"]),\
-						font=self.font),
+						font=self.font,\
+						fg="CornflowerBlue"),
 			"ATK": Label(self.plr2_frame,\
 						 text=str(self.plr2.numbers["ATK"]),\
-						 font=self.font),
+						 font=self.font,\
+						fg="CornflowerBlue"),
 			"DEF": Label(self.plr2_frame,\
 						 text=str(self.plr2.numbers["DEF"]),\
-						 font=self.font),
+						 font=self.font,\
+						fg="CornflowerBlue"),
 			"SPD": Label(self.plr2_frame,\
 						 text=str(self.plr2.numbers["SPD"]),\
-						 font=self.font),
+						 font=self.font,\
+						fg="CornflowerBlue"),
 			"ACC": Label(self.plr2_frame,\
 						 text=str(self.plr2.numbers["ACC"]),\
-						 font=self.font),
+						 font=self.font,\
+						fg="CornflowerBlue"),
 			"LUK": Label(self.plr2_frame,\
 						 text=str(self.plr2.numbers["LUK"]),\
-						 font=self.font)
+						 font=self.font,\
+						fg="CornflowerBlue")
 		}
 		# 显示固定不变的 Label.
 		Label(self.plr2_frame,\
@@ -567,13 +592,21 @@ class Application(Tk):
 		实时更新玩家数据的方法。
 		"""
 		for x in labels.keys():
-			labels[x].configure(text=str(fighter.numbers[x]))
+			if fighter.numbers[x] <= 0:
+				labels[x].configure(text=str(fighter.numbers[x]), fg="red")
+			else:
+				labels[x].configure(text=str(fighter.numbers[x]),\
+									fg="CornflowerBlue")
+
+
 
 	def create_text(self):
 		"""
 		建立文本显示区显示对战过程。
 		"""
-		self.text_display = ScrolledText(self, font=self.font)
+		self.text_display = ScrolledText(self,\
+										 font=self.font,\
+										 fg="DarkSlateGray")
 		# self.text_display.bind("<KeyPress>", lambda e : "break")
 		self.text_display.grid(row=1, column=1, ipadx=10, ipady=10)
 
