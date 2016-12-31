@@ -288,7 +288,7 @@ class Monitor(Fighter):
 	班长类，继承 Fighter，拥有特殊的狂咬攻击。
 	"""
 	def __init__(self, name, enemy_name, printer=print):
-		super(Monitor, self).__init__(name, enemy_name)
+		super(Monitor, self).__init__(name, enemy_name, printer)
 
 
 	def sbite(self, number):
@@ -297,7 +297,7 @@ class Monitor(Fighter):
 		"""
 		number1 = self.spawn_number(1, 0.9 * number)
 		number2 = self.spawn_number(1, 0.7 * number)
-		self.printer("%s 发现 %s 思修成绩不及格，发狂了，上前狂咬了 %s 一口，造成了 %d 点伤害，又上前狂咬了 %s 一口，造成了 %d 点伤害，又上前狂咬了 %s 一口，造成了 %d 点伤害，自己受到反噬的 %d 点伤害。"%(self.NAME, self.ENEMY, self.ENEMY, self.ENEMY, self.ENEMY, number, number1, number2))
+		self.printer("%s 发现 %s 思修成绩不及格，发狂了，上前狂咬了 %s 一口，造成了 %d 点伤害，又上前狂咬了 %s 一口，造成了 %d 点伤害，又上前狂咬了 %s 一口，造成了 %d 点伤害，自己受到反噬的 %d 点伤害。"%(self.NAME, self.ENEMY, self.ENEMY, number, self.ENEMY, number1, self.ENEMY, number2, number1 + number2))
 		case_number = {"HP": number + number1 + number2}
 		self.enemy.hurt(case_number)
 		case_number = {"HP": number1 + number2}
@@ -347,7 +347,7 @@ class Monitor(Fighter):
 				case = "fall"
 
 		{
-			"sbite": lambda x: self.bite(x),
+			"sbite": lambda x: self.sbite(x),
 			"bite": lambda x: self.bite(x),
 			"miss": lambda x: self.miss(x),
 			"fall": lambda x: self.fall(x),
@@ -670,8 +670,16 @@ class Application(Tk):
 		# return 1
 
 		# 生成 Fighter 对象。
-		self.plr1 = Fighter(self.plr1_name, self.plr2_name, printer)
-		self.plr2 = Fighter(self.plr2_name, self.plr1_name, printer)
+		# self.plr1 = Fighter(self.plr1_name, self.plr2_name, printer)
+		# self.plr2 = Fighter(self.plr2_name, self.plr1_name, printer)
+		if "班长" in self.plr1_name:
+			self.plr1 = Monitor(self.plr1_name, self.plr2_name, printer)
+		else:
+			self.plr1 = Fighter(self.plr1_name, self.plr2_name, printer)
+		if "班长" in self.plr2_name:
+			self.plr2 = Monitor(self.plr2_name, self.plr1_name, printer)
+		else:
+			self.plr2 = Fighter(self.plr2_name, self.plr1_name, printer)
 
 		# 获取敌对对象。
 		self.plr1.get_enemy(self.plr2)
