@@ -3,7 +3,7 @@
 
 ### Filename: tkmain.py
 ## Created by 请叫我喵 Alynx
-# sxshax@gmail.com, http://alynx.xyz/
+# alynx.zhou@gmail.com, http://alynx.xyz/
 
 
 
@@ -423,7 +423,6 @@ class Application(Tk):
 					 fg="DarkSlateBlue")
 		# 在 Frame 的第二行展示。
 		self.name_input1.grid(row=1)
-		self.input_frame1.rowconfigure(0, weight=1)
 		# 在第一行第一列展示第一个 Frame。
 		self.input_frame1.grid(row=0, column=0, columnspan=2, padx=30, pady=10)
 		# 绑定回车作为执行键（有问题）。
@@ -448,8 +447,6 @@ class Application(Tk):
 					 font=self.font,\
 					 fg="DarkSlateBlue")
 		self.name_input2.grid(row=1)
-		self.input_frame1.rowconfigure(0, weight=1)
-		self.input_frame1.columnconfigure(0, weight=1)
 		self.input_frame2.grid(row=0, column=3, columnspan=2, padx=30, pady=10)
 		# self.name_input2.bind(sequence="<Enter>", func=self.callback)
 
@@ -680,6 +677,8 @@ class Application(Tk):
 			self.plr2 = Monitor(self.plr2_name, self.plr1_name, printer)
 		else:
 			self.plr2 = Fighter(self.plr2_name, self.plr1_name, printer)
+
+		# if "Misaka" in 
 
 		# 获取敌对对象。
 		self.plr1.get_enemy(self.plr2)
